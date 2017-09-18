@@ -1,5 +1,9 @@
 # farming_nextGen
 
+Credits:
+tm3 for painting the seeder texture
+
+
 
 This mod will give you the rechargeable
 seeder.

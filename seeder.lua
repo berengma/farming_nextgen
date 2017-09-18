@@ -1,3 +1,11 @@
+--*******************************************************
+--****                 The Seeder
+--**** All coding made by Gundul except recursive_dig 
+--**** was taken from technic:chainsaw mod coded by
+--**** Maciej Kasatkin (RealBadAngel)
+--*******************************************************
+
+
 -- Configuration
 
 local seeder_max_charge      = 30000 -- Maximum charge of the seeder
@@ -239,7 +247,7 @@ end
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	-- Start sawing things down
 	local remaining_charge, seednum, seedstack = recursive_dig(pos, current_charge, seednum, seedstack, user)
-	minetest.sound_play("chainsaw", {pos = pos, gain = 1.0, max_hear_distance = 10})
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 1.0, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
 
