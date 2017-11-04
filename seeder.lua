@@ -8,14 +8,14 @@
 
 -- Configuration
 
-local seeder_max_charge      = 30000 -- Maximum charge of the seeder
--- Gives 2500 plants a new life :D )
-local seeder_charge_per_node = 12
+local seeder_max_charge      = 900000 -- Maximum charge of the seeder
+-- Gives 500 plants a new life 
+local seeder_charge_per_node = 1800
 -- Is technic mod present ? If not use wearout tool instead
 local havetech = minetest.get_modpath("technic")
 -- turn on/off chat messages
 local chaton = false
-local krepair = 5 -- how many flints you need to repair one seeder
+local easy = false
 
 -- different values if technic not present
 if not havetech then
@@ -195,6 +195,11 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	local top = minetest.get_node(toppos)
 	local seedname = seedstack:get_name()
 	local helpers = check_valid_util(upper.name)
+	
+	if node.name == "farming:weed" then
+	    remaining_charge, seednum, seedstack = recursive_dig( {x=pos.x, y=pos.y-1, z=pos.z}, remaining_charge, seednum, seedstack, user)
+	    return remaining_charge, seednum, seedstack
+	end
 
 	if not soil_nodenames[node.name] then
 		return remaining_charge, seednum, seedstack
@@ -246,14 +251,14 @@ end
 
 -- Seeder entry point
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
+	-- Start sawing things down
 	local remaining_charge, seednum, seedstack = recursive_dig(pos, current_charge, seednum, seedstack, user)
 	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 1.0, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
 
 
-
-if havetech then  
+if havetech then
   
 	  local S = technic.getter
 
@@ -325,20 +330,31 @@ if havetech then
 	  local mesecons_button = minetest.get_modpath("mesecons_button")
 	  local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
 
-	  minetest.register_craft({
-		  output = "farming_nextgen:seeder",
-		  recipe = {
-			  {"technic:battery",                                    trigger,                      "technic:battery"              },
-			  {"technic:stainless_steel_ingot",      "technic:stainless_steel_ingot",              "technic:stainless_steel_ingot"},
-			  {"default:diamond",                              "",                                 "default:diamond"},
-		  }
-	  })
+	  if easy then
+		    minetest.register_craft({
+			    output = "farming_nextgen:seeder",
+			    recipe = {
+				    {"technic:battery",                                    trigger,                      "technic:battery"              },
+				    {"technic:stainless_steel_ingot",      "technic:stainless_steel_ingot",              "technic:stainless_steel_ingot"},
+				    {"default:diamond",                              "",                                 "default:diamond"},
+			    }
+		    })
+	  else
+		    minetest.register_craft({
+				    output = "farming_nextgen:seeder",
+				    recipe = {
+					    {"technic:red_energy_crystal",                                    trigger,                      "technic:red_energy_crystal"              },
+					    {"technic:composite_plate",      "technic:composite_plate",              "technic:composite_plate"},
+					    {"technic:rubber",                              "",                                 "technic:rubber"},
+				    }
+			    })
+	  end
 	  
-else  -- the default device
+else
 	      
 	  
 	  minetest.register_tool("farming_nextgen:seeder", {
-		  description = "Automatic seeding tool",
+		  description = "Automatik seeding tool",
 		  groups = {soil=3,soil=2},
 		  inventory_image = "farming_nextgen_seeder.png",
 		  stack_max=1,
@@ -394,30 +410,6 @@ else  -- the default device
 			  return itemstack
 		    
 			  
-		  end,
-		  
-		  on_place = function(itemstack, user, pointed_thing)  -- right-click to fix your seeder
-
-		  
-		          local name = user:get_player_name()
-			  local charge = 65535 - itemstack:get_wear()
-			  local inv = user:get_inventory()
-			  local indexnumber = user:get_wield_index()+1
-			  local seedstack = inv:get_stack("main", indexnumber)
-			  local seedname = seedstack:get_name()
-			  
-			  
-			  if seedname == "default:flint" then
-				charge = charge + (math.floor(65535/krepair))
-				if charge > 65534 then charge = 65534 end
-				itemstack:set_wear(65535-charge)
-				seedstack:take_item()
-				inv:set_stack("main", indexnumber, seedstack)
-			  else
-				minetest.chat_send_player(name,"*** You need flints to sharpen your seeder")
-			  end
-			  return itemstack
-
 		  end,
 	  })
 
