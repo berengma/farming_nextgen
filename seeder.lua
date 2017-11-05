@@ -6,21 +6,10 @@
 --*******************************************************
 
 
--- Configuration
-
-local seeder_max_charge      = 900000 -- Maximum charge of the seeder
--- Gives 500 plants a new life 
-local seeder_charge_per_node = 1800
--- Is technic mod present ? If not use wearout tool instead
-local havetech = minetest.get_modpath("technic")
--- turn on/off chat messages
-local chaton = false
-local easy = false
-
 -- different values if technic not present
-if not havetech then
-      seeder_charge_per_node = math.floor(65535 / seeder_max_charge * seeder_charge_per_node)
-      seeder_max_charge = 65535
+if not farmingNG.havetech then
+      farmingNG.seeder_charge_per_node = math.floor(65535 / farmingNG.seeder_max_charge * farmingNG.seeder_charge_per_node)
+      farmingNG.seeder_max_charge = 65535
 end
 
 
@@ -134,7 +123,7 @@ end
 -- position above it.  This does not return the bottom position to prevent
 -- the seeder from cutting down nodes below the cutting position.
 -- @param pos Sawing position.
-local function iterSawTries(pos)
+function farmingNG.iterSawTries(pos)
 	-- Copy position to prevent mangling it
 	local pos = vector.new(pos)
 	local i = 0
@@ -187,7 +176,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	local toppos = {x =pos.x, y =(pos.y) +2,z =pos.z}
 	local name = user:get_player_name()
 	
-	if remaining_charge < seeder_charge_per_node or seedstack:is_empty() then
+	if remaining_charge < farmingNG.seeder_charge_per_node or seedstack:is_empty() then
 		return remaining_charge, seednum, seedstack
 	end
 	local node = minetest.get_node(pos)
@@ -208,7 +197,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	if not check_valid_util(seedname) then
 	      if upper.name == "air" or upper.name == "farming:weed" then
 		    minetest.set_node(uppos, {name="air"})
-		    remaining_charge = remaining_charge - seeder_charge_per_node
+		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
 		    
@@ -222,7 +211,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	else
 	     if (upper.name == "air" or upper.name == "farming:weed") and top.name == "air" then 
 		    minetest.set_node(uppos, {name="air"})
-		    remaining_charge = remaining_charge - seeder_charge_per_node
+		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
 		    
@@ -236,8 +225,8 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	end
 
 	-- Check surroundings and run recursively if any charge left
-	for npos in iterSawTries(pos) do
-		if remaining_charge < seeder_charge_per_node then
+	for npos in farmingNG.iterSawTries(pos) do
+		if remaining_charge < farmingNG.seeder_charge_per_node then
 			break
 		end
 		if soil_nodenames[minetest.get_node(npos).name] then
@@ -258,11 +247,11 @@ local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 end
 
 
-if havetech then
+if farmingNG.havetech then
   
 	  local S = technic.getter
 
-	  technic.register_power_tool("farming_nextgen:seeder", seeder_max_charge)
+	  technic.register_power_tool("farming_nextgen:seeder", farmingNG.seeder_max_charge)
 
 
 	  minetest.register_tool("farming_nextgen:seeder", {
@@ -283,7 +272,7 @@ if havetech then
 
 			  local meta = minetest.deserialize(itemstack:get_metadata())
 			  if not meta or not meta.charge or
-					  meta.charge < seeder_charge_per_node then
+					  meta.charge < farmingNG.seeder_charge_per_node then
 				  return
 			  end
 
@@ -317,7 +306,7 @@ if havetech then
 			  end
 			  
 			  if not technic.creative_mode then
-				  technic.set_RE_wear(itemstack, meta.charge, seeder_max_charge)
+				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
 				  itemstack:set_metadata(minetest.serialize(meta))
 			  end
 			  inv:set_stack("main", indexnumber, seedstack)
@@ -330,7 +319,7 @@ if havetech then
 	  local mesecons_button = minetest.get_modpath("mesecons_button")
 	  local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
 
-	  if easy then
+	  if farmingNG.easy then
 		    minetest.register_craft({
 			    output = "farming_nextgen:seeder",
 			    recipe = {
@@ -372,7 +361,7 @@ else
 			  local charge = 65535 - itemstack:get_wear()
 			  
 			  if not charge or  
-					  charge < seeder_charge_per_node then
+					  charge < farmingNG.seeder_charge_per_node then
 				  return
 			  end
 
@@ -393,8 +382,8 @@ else
 			  if seedname then
 			    if check_valid_seed(seedname) or check_valid_util(seedname) then
 				charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
-				if chaton then
-				     minetest.chat_send_player(name,"*** You used :  "..seednum.." seeds     ".."Charge for "..math.floor(charge/seeder_charge_per_node).." seeds left")
+				if farmingNG.chaton then
+				     minetest.chat_send_player(name,"*** You used :  "..seednum.." seeds     ".."Charge for "..math.floor(charge/farmingNG.seeder_charge_per_node).." seeds left")
 				end
 			    else
 				minetest.chat_send_player(name," *** you need valid seeds on the right side of your device")
