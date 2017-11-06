@@ -51,7 +51,14 @@ local soil_nodenames = {
 
 -- the seed library {    name of seed, name after beeing planted  }
 local seeder_seed = {
-	    {"farming_plus:seed_barley", "farming_plus:barley_1"},
+-- *** farming
+	    {"farming:seed_barley", "farming:barley_1"},
+	    {"farming:seed_hemp", "farming:hemp_1"},
+	    {"farming:pumpkin_seed", "farming:pumpkin_1"},
+	    {"farming:coffee_beans", "farming:coffee_1"},
+	    {"farming:chili_pepper", "farming:chili_1"},
+	    
+-- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
 	    {"farming_plus:chilli_seeds", "farming_plus:chilli_1"},
 	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
@@ -61,7 +68,6 @@ local seeder_seed = {
 	    {"farming_plus:seed_hemp", "farming_plus:hemp_1"},
 	    {"farming_plus:melon_seed", "farming_plus:melon_1"},
 	    {"farming_plus:potato_seed", "farming_plus:potato_1"},
-	    {"farming:pumpkin_seed", "farming:pumpkin_1"},
 	    {"farming_plus:rhubarb_seed", "farming_plus:rhubarb_1"},
 	    {"farming_plus:raspberry_seed", "farming_plus:raspberry_1"},
 	    {"farming_plus:strawberry_seed", "farming_plus:strawberry_1"},
@@ -71,10 +77,19 @@ local seeder_seed = {
 	    {"farming_plus:orange_seed", "farming_plus:orange_1"},
 	    {"farming_plus:lemon_seed", "farming_plus:lemon_1"},
 	    {"farming_plus:peach_seed", "farming_plus:peach_1"},
-	    {"farming:seed_wheat", "farming:seed_wheat"},
+	    {"farming_plus:seed_barley", "farming_plus:barley_1"},
+	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
+	
+-- *** beer_test
 	    {"beer_test:seed_oats", "beer_test:seed_oats"},
-	    {"farming:seed_cotton", "farming:seed_cotton"}
-	    
+
+-- If you have Problems with growing wheat and cotton, then try the two lines below
+	    {"farming:seed_wheat", "farming:wheat_1"},
+	    {"farming:seed_cotton", "farming:cotton_1"}
+
+-- If you haven't any Problems with growing wheat and cotton, then use the two lines below
+--	    {"farming:seed_wheat", "farming:seed_wheat"},
+--	    {"farming:seed_cotton", "farming:seed_cotton"}
 	    
 }
 
