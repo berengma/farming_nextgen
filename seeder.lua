@@ -49,9 +49,29 @@ local soil_nodenames = {
 	["farming:desert_sand_soil_wet"]= true
 }
 
--- the seed library {    name of seed, name after beeing planted  }
 local seeder_seed = {
-	    {"farming_plus:seed_barley", "farming_plus:barley_1"},
+-- *** farming
+	    {"farming:seed_barley", "farming:barley_1"},
+	    {"farming:seed_hemp", "farming:hemp_1"},
+	    {"farming:pumpkin_seed", "farming:pumpkin_1"},
+	    {"farming:coffee_beans", "farming:coffee_1"},
+	    {"farming:chili_pepper", "farming:chili_1"},
+	    {"farming:carrot", "farming:carrot_1"},
+	    {"farming:corn", "farming:corn_1"},
+	    {"farming:cucumber", "farming:cucumber_1"},
+	    {"farming:garlic_clove", "farming:garlic_1"},
+	    {"farming:melon_slice", "farming:melon_1"},
+	    {"farming:onion", "farming:onion_1"},
+	    {"farming:peppercorn", "farming:pepper_1"},
+	    {"farming:pineapple_top", "farming:pineapple_1"},
+	    {"farming:potato", "farming:potato_1"},
+	    {"farming:pumpkin_slice", "farming:pumpkin_1"},
+	    {"farming:raspberries", "farming:raspberry_1"},
+	    {"farming:rhubarb", "farming:rhubarb_1"},
+	    {"farming:tomato", "farming:tomato_1"},
+	    {"farming:blueberries", "farming:blueberry_1"},
+	    
+-- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
 	    {"farming_plus:chilli_seeds", "farming_plus:chilli_1"},
 	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
@@ -61,7 +81,6 @@ local seeder_seed = {
 	    {"farming_plus:seed_hemp", "farming_plus:hemp_1"},
 	    {"farming_plus:melon_seed", "farming_plus:melon_1"},
 	    {"farming_plus:potato_seed", "farming_plus:potato_1"},
-	    {"farming:pumpkin_seed", "farming:pumpkin_1"},
 	    {"farming_plus:rhubarb_seed", "farming_plus:rhubarb_1"},
 	    {"farming_plus:raspberry_seed", "farming_plus:raspberry_1"},
 	    {"farming_plus:strawberry_seed", "farming_plus:strawberry_1"},
@@ -71,12 +90,22 @@ local seeder_seed = {
 	    {"farming_plus:orange_seed", "farming_plus:orange_1"},
 	    {"farming_plus:lemon_seed", "farming_plus:lemon_1"},
 	    {"farming_plus:peach_seed", "farming_plus:peach_1"},
-	    {"farming:seed_wheat", "farming:seed_wheat"},
+	    {"farming_plus:seed_barley", "farming_plus:barley_1"},
+	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
+	
+-- *** beer_test
 	    {"beer_test:seed_oats", "beer_test:seed_oats"},
-	    {"farming:seed_cotton", "farming:seed_cotton"}
-	    
+
+-- If you have Problems with growing wheat and cotton, then try the two lines below
+	    {"farming:seed_wheat", "farming:wheat_1"},
+	    {"farming:seed_cotton", "farming:cotton_1"}
+
+-- If you haven't any Problems with growing wheat and cotton, then use the two lines below
+--	    {"farming:seed_wheat", "farming:seed_wheat"},
+--	    {"farming:seed_cotton", "farming:seed_cotton"}
 	    
 }
+
 
 local seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
@@ -362,6 +391,7 @@ else
 			  
 			  if not charge or  
 					  charge < farmingNG.seeder_charge_per_node then
+					  minetest.chat_send_player(name," *** Your device needs to be serviced")
 				  return
 			  end
 
