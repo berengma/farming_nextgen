@@ -52,7 +52,7 @@ end
 
 -- Table for saving what was sawed down
 local produced = {}
-Chainsaw
+
 -- Save the items sawed down so that we can drop them in a nice single stack
 local function handle_drops(drops)
 	for _, item in ipairs(drops) do
