@@ -4,6 +4,7 @@
 --**** was taken from technic:chainsaw mod coded by
 --**** Maciej Kasatkin (RealBadAngel)
 --*******************************************************
+local farm_redo = false
 
 
 -- different values if technic not present
@@ -12,9 +13,13 @@ if not farmingNG.havetech then
       farmingNG.seeder_max_charge = 65535
 end
 
+--check for farming redo mod
+if minetest.global_exists("farming") then
+    if farming.mod == "redo" then farm_redo = true end
+end
 
 -- grapes and beans from farming_plus need helpers to grow
-if minetest.get_modpath("farming_plus") then
+if minetest.get_modpath("farming_plus") or farm_redo then
   
       minetest.register_craftitem("farming_nextgen:grape_seedling", {
 	    description = "A grape seedling for the seeder",
@@ -26,17 +31,32 @@ if minetest.get_modpath("farming_plus") then
 	    inventory_image = "farming_beanpole_1.png"
       })
       
-      minetest.register_craft({
-		  type = "shapeless",
-		  output = "farming_nextgen:grape_seedling",
-		  recipe = {"farming_plus:trellis","farming_plus:grapes"}
-      })
-      
-      minetest.register_craft({
-		  type = "shapeless",
-		  output = "farming_nextgen:bean_seedling",
-		  recipe = {"farming_plus:beanpole","farming_plus:beans"}
-      })
+      if not farm_redo then
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:grape_seedling",
+			recipe = {"farming_plus:trellis","farming_plus:grapes"}
+	    })
+	    
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:bean_seedling",
+			recipe = {"farming_plus:beanpole","farming_plus:beans"}
+	    })
+      else
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:grape_seedling",
+			recipe = {"farming:trellis","farming:grapes"}
+	    })
+	    
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:bean_seedling",
+			recipe = {"farming:beanpole","farming:beans"}
+	    })
+      end
+	
 end
 
 
@@ -107,10 +127,19 @@ local seeder_seed = {
 }
 
 
+-- wine and beans need climbing utilities
+ 
 local seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
   {"farming_nextgen:bean_seedling", "farming_plus:beanpole_1"}
 }
+      
+if farm_redo then
+      seeder_utils = {
+      {"farming_nextgen:grape_seedling", "farming:grapes_1"},
+      {"farming_nextgen:bean_seedling", "farming:beanpole_1"}
+      }
+end
 
 
 
