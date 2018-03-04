@@ -258,6 +258,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
+		    if remaining_charge < 1 then remaining_charge = 1 end
 		    
 		    if give_seedling(seedname,false) then
 			  minetest.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
@@ -272,6 +273,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
+		    if remaining_charge < 1 then remaining_charge = 1 end
 		    
 		    if give_seedling(seedname, true) then
 			  minetest.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})

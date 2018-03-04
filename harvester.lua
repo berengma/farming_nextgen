@@ -84,6 +84,7 @@ local function recursive_harvest(pos, remaining_charge)
 	handle_drops(minetest.get_node_drops(node.name, ""))
 	minetest.remove_node(pos)
 	remaining_charge = remaining_charge - farmingNG.harvester_charge_per_node
+	if remaining_charge < 1 then remaining_charge = 1 end
 
 	-- Check surroundings and run recursively if any charge left
 	for npos in farmingNG.iterSawTries(pos) do
