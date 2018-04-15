@@ -90,6 +90,7 @@ local seeder_seed = {
 	    {"farming:rhubarb", "farming:rhubarb_1"},
 	    {"farming:tomato", "farming:tomato_1"},
 	    {"farming:blueberries", "farming:blueberry_1"},
+	    {"farming:pea_pod", "farming:pea_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
