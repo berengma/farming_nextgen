@@ -45,6 +45,7 @@ local harvester_names = {}
 	harvester_names["farming:grapes_8"]	= true
 	harvester_names["farming:beanpole_5"]	= true
 	harvester_names["farming:pea_5"]	= true
+	harvester_names["farming:beetroot_5"]	= true
 	
 if not farmingNG.havetech then
       farmingNG.harvester_charge_per_node = math.floor(65535 / farmingNG.harvester_max_charge * farmingNG.harvester_charge_per_node)
