@@ -69,6 +69,15 @@ local soil_nodenames = {
 	["farming:desert_sand_soil_wet"]= true
 }
 
+
+--support compost mod 
+if minetest.get_modpath("compost") then
+  
+	soil_nodenames["compost:garden_soil"] = true
+end
+
+
+
 local seeder_seed = {
 -- *** farming
 	    {"farming:seed_barley", "farming:barley_1"},

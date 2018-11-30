@@ -17,3 +17,5 @@ and leftclick on a piece of soil.
 All soil will be seeded with your choosen seed while
 all weed will be removed before, if any.
 
+
+30/11/2018 added support of compost:garden_soil if compost mod is present
