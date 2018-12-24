@@ -126,6 +126,8 @@ local seeder_seed = {
 	
 -- *** beer_test
 	    {"beer_test:seed_oats", "beer_test:seed_oats"},
+
+if (minetest.get_modpath("cucina_vegana")) then
     
 -- *** cucina_vegana
         {"cucina_vegana:seed_soy", "cucina_vegana:soy_1"},
@@ -148,6 +150,8 @@ local seeder_seed = {
         {"cucina_vegana:asparagus_seed", "cucina_vegana:asparagus_1"},
         {"cucina_vegana:rice_seed", "cucina_vegana:rice_1"},
     
+end
+
 -- If you have Problems with growing wheat and cotton, then try the two lines below
 	    {"farming:seed_wheat", "farming:wheat_1"},
 	    {"farming:seed_cotton", "farming:cotton_1"}

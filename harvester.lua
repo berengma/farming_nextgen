@@ -52,7 +52,9 @@ local harvester_names = {}
 	harvester_names["farming_plus:cornb"]	= true
 	harvester_names["farming_plus:cornc"]	= true
 
-	-- cucina_vegana
+if (minetest.get_modpath("cucina_vegana")) then
+
+    -- cucina_vegana
     harvester_names["cucina_vegana:soy_8"]	= true
     harvester_names["cucina_vegana:parsley_5"]	= true
     harvester_names["cucina_vegana:lettuce_5"]	= true
@@ -63,6 +65,8 @@ local harvester_names = {}
     harvester_names["cucina_vegana:asparagus_6"]	= true
     harvester_names["cucina_vegana:rice_6"]	= true
     
+end
+
 if not farmingNG.havetech then
       farmingNG.harvester_charge_per_node = math.floor(65535 / farmingNG.harvester_max_charge * farmingNG.harvester_charge_per_node)
       farmingNG.harvester_max_charge = 65535
