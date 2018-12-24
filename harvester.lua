@@ -59,7 +59,7 @@ if (minetest.get_modpath("cucina_vegana")) then
     harvester_names["cucina_vegana:parsley_5"]	= true
     harvester_names["cucina_vegana:lettuce_5"]	= true
     harvester_names["cucina_vegana:chives_5"]	= true
-    harvester_names["cucina_vegana:rosemary_5"]	= true
+    harvester_names["cucina_vegana:rosemary_6"]	= true
     harvester_names["cucina_vegana:sunflower_5"]	= true
     harvester_names["cucina_vegana:kohlrabi_6"]	= true
     harvester_names["cucina_vegana:asparagus_6"]	= true
