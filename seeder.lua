@@ -127,31 +127,6 @@ local seeder_seed = {
 -- *** beer_test
 	    {"beer_test:seed_oats", "beer_test:seed_oats"},
 
-if (minetest.get_modpath("cucina_vegana")) then
-    
--- *** cucina_vegana
-        {"cucina_vegana:seed_soy", "cucina_vegana:soy_1"},
-        {"cucina_vegana:seed_parsley", "cucina_vegana:parsley_1"},
-        {"cucina_vegana:seed_lettuce", "cucina_vegana:lettuce_1"},
-        {"cucina_vegana:seed_chives", "cucina_vegana:chives_1"},
-        {"cucina_vegana:seed_rosemary", "cucina_vegana:rosemary_1"},
-        {"cucina_vegana:seed_sunflower", "cucina_vegana:sunflower_1"},
-        {"cucina_vegana:seed_kohlrabi", "cucina_vegana:kohlrabi_1"},
-        {"cucina_vegana:seed_asparagus", "cucina_vegana:asparagus_1"},
-        {"cucina_vegana:seed_rice", "cucina_vegana:rice_1"},
-
-        {"cucina_vegana:soy_seed", "cucina_vegana:soy_1"},
-        {"cucina_vegana:parsley_seed", "cucina_vegana:parsley_1"},
-        {"cucina_vegana:lettuce_seed", "cucina_vegana:lettuce_1"},
-        {"cucina_vegana:chives_seed", "cucina_vegana:chives_1"},
-        {"cucina_vegana:rosemary_seed", "cucina_vegana:rosemary_1"},
-        {"cucina_vegana:sunflower_seed", "cucina_vegana:sunflower_1"},
-        {"cucina_vegana:kohlrabi_seed", "cucina_vegana:kohlrabi_1"},
-        {"cucina_vegana:asparagus_seed", "cucina_vegana:asparagus_1"},
-        {"cucina_vegana:rice_seed", "cucina_vegana:rice_1"},
-    
-end
-
 -- If you have Problems with growing wheat and cotton, then try the two lines below
 	    {"farming:seed_wheat", "farming:wheat_1"},
 	    {"farming:seed_cotton", "farming:cotton_1"}
@@ -162,6 +137,31 @@ end
 	    
 }
 
+
+if (minetest.get_modpath("cucina_vegana")) then
+    
+-- *** cucina_vegana
+        table.insert(seeder_seed, {"cucina_vegana:seed_soy", "cucina_vegana:soy_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_parsley", "cucina_vegana:parsley_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_lettuce", "cucina_vegana:lettuce_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_chives", "cucina_vegana:chives_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_rosemary", "cucina_vegana:rosemary_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_sunflower", "cucina_vegana:sunflower_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_kohlrabi", "cucina_vegana:kohlrabi_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_asparagus", "cucina_vegana:asparagus_1"})
+        table.insert(seeder_seed, {"cucina_vegana:seed_rice", "cucina_vegana:rice_1"})
+
+        table.insert(seeder_seed, {"cucina_vegana:soy_seed", "cucina_vegana:soy_1"})
+        table.insert(seeder_seed, {"cucina_vegana:parsley_seed", "cucina_vegana:parsley_1"})
+        table.insert(seeder_seed, {"cucina_vegana:lettuce_seed", "cucina_vegana:lettuce_1"})
+        table.insert(seeder_seed, {"cucina_vegana:chives_seed", "cucina_vegana:chives_1"})
+        table.insert(seeder_seed, {"cucina_vegana:rosemary_seed", "cucina_vegana:rosemary_1"})
+        table.insert(seeder_seed, {"cucina_vegana:sunflower_seed", "cucina_vegana:sunflower_1"})
+        table.insert(seeder_seed, {"cucina_vegana:kohlrabi_seed", "cucina_vegana:kohlrabi_1"})
+        table.insert(seeder_seed, {"cucina_vegana:asparagus_seed", "cucina_vegana:asparagus_1"})
+        table.insert(seeder_seed, {"cucina_vegana:rice_seed", "cucina_vegana:rice_1"})
+    
+end
 
 -- wine and beans need climbing utilities
  
