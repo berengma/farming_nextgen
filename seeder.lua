@@ -4,6 +4,7 @@
 --**** was taken from technic:chainsaw mod coded by
 --**** Maciej Kasatkin (RealBadAngel)
 --*******************************************************
+local farm_redo = false
 
 
 -- different values if technic not present
@@ -12,9 +13,13 @@ if not farmingNG.havetech then
       farmingNG.seeder_max_charge = 65535
 end
 
+--check for farming redo mod
+if minetest.global_exists("farming") then
+    if farming.mod == "redo" then farm_redo = true end
+end
 
 -- grapes and beans from farming_plus need helpers to grow
-if minetest.get_modpath("farming_plus") then
+if minetest.get_modpath("farming_plus") or farm_redo then
   
       minetest.register_craftitem("farming_nextgen:grape_seedling", {
 	    description = "A grape seedling for the seeder",
@@ -26,17 +31,32 @@ if minetest.get_modpath("farming_plus") then
 	    inventory_image = "farming_beanpole_1.png"
       })
       
-      minetest.register_craft({
-		  type = "shapeless",
-		  output = "farming_nextgen:grape_seedling",
-		  recipe = {"farming_plus:trellis","farming_plus:grapes"}
-      })
-      
-      minetest.register_craft({
-		  type = "shapeless",
-		  output = "farming_nextgen:bean_seedling",
-		  recipe = {"farming_plus:beanpole","farming_plus:beans"}
-      })
+      if not farm_redo then
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:grape_seedling",
+			recipe = {"farming_plus:trellis","farming_plus:grapes"}
+	    })
+	    
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:bean_seedling",
+			recipe = {"farming_plus:beanpole","farming_plus:beans"}
+	    })
+      else
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:grape_seedling",
+			recipe = {"farming:trellis","farming:grapes"}
+	    })
+	    
+	    minetest.register_craft({
+			type = "shapeless",
+			output = "farming_nextgen:bean_seedling",
+			recipe = {"farming:beanpole","farming:beans"}
+	    })
+      end
+	
 end
 
 
@@ -49,7 +69,15 @@ local soil_nodenames = {
 	["farming:desert_sand_soil_wet"]= true
 }
 
--- the seed library {    name of seed, name after beeing planted  }
+
+--support compost mod 
+if minetest.get_modpath("compost") then
+  
+	soil_nodenames["compost:garden_soil"] = true
+end
+
+
+
 local seeder_seed = {
 -- *** farming
 	    {"farming:seed_barley", "farming:barley_1"},
@@ -57,6 +85,22 @@ local seeder_seed = {
 	    {"farming:pumpkin_seed", "farming:pumpkin_1"},
 	    {"farming:coffee_beans", "farming:coffee_1"},
 	    {"farming:chili_pepper", "farming:chili_1"},
+	    {"farming:carrot", "farming:carrot_1"},
+	    {"farming:corn", "farming:corn_1"},
+	    {"farming:cucumber", "farming:cucumber_1"},
+	    {"farming:garlic_clove", "farming:garlic_1"},
+	    {"farming:melon_slice", "farming:melon_1"},
+	    {"farming:onion", "farming:onion_1"},
+	    {"farming:peppercorn", "farming:pepper_1"},
+	    {"farming:pineapple_top", "farming:pineapple_1"},
+	    {"farming:potato", "farming:potato_1"},
+	    {"farming:pumpkin_slice", "farming:pumpkin_1"},
+	    {"farming:raspberries", "farming:raspberry_1"},
+	    {"farming:rhubarb", "farming:rhubarb_1"},
+	    {"farming:tomato", "farming:tomato_1"},
+	    {"farming:blueberries", "farming:blueberry_1"},
+	    {"farming:pea_pod", "farming:pea_1"},
+	    {"farming:beetroot", "farming:beetroot_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
@@ -93,10 +137,20 @@ local seeder_seed = {
 	    
 }
 
+
+-- wine and beans need climbing utilities
+ 
 local seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
   {"farming_nextgen:bean_seedling", "farming_plus:beanpole_1"}
 }
+      
+if farm_redo then
+      seeder_utils = {
+      {"farming_nextgen:grape_seedling", "farming:grapes_1"},
+      {"farming_nextgen:bean_seedling", "farming:beanpole_1"}
+      }
+end
 
 
 
@@ -215,6 +269,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
+		    if remaining_charge < 1 then remaining_charge = 1 end
 		    
 		    if give_seedling(seedname,false) then
 			  minetest.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
@@ -229,6 +284,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
 		    seedstack:take_item()
+		    if remaining_charge < 1 then remaining_charge = 1 end
 		    
 		    if give_seedling(seedname, true) then
 			  minetest.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})
@@ -377,6 +433,7 @@ else
 			  
 			  if not charge or  
 					  charge < farmingNG.seeder_charge_per_node then
+					  minetest.chat_send_player(name," *** Your device needs to be serviced")
 				  return
 			  end
 

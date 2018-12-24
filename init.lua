@@ -7,7 +7,7 @@ local path = minetest.get_modpath(minetest.get_current_modname())
 dofile(path.."/settings.lua")
 dofile(path.."/seeder.lua")
 
-if farmingNG.havetech and farmingNG.harvester_machine then
+if  farmingNG.harvester_machine then
       dofile(path.."/harvester.lua")
 end
 
