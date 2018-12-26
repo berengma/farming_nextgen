@@ -1,72 +1,56 @@
-local harvester_names = {}
 -- The harvester
 	
     -- farming
-	harvester_names["farming:wheat_8"] = true 
-	harvester_names["farming:cotton_8"] = true
-	harvester_names["farming:weed"] 	= false
-    harvester_names["farming:pumpkin"]	= true
-	harvester_names["farming:barley_7"]	= true
-	harvester_names["farming:blueberry_4"]	= true
-	harvester_names["farming:carrot_8"]	= true
-	harvester_names["farming:chili_8"]	= true
-	harvester_names["farming:coffee_5"]	= true
-	harvester_names["farming:corn_8"]	= true
-	harvester_names["farming:cucumber_4"]	= true
-	harvester_names["farming:garlic_5"]	= true
-	harvester_names["farming:hemp_8"]	= true
-	harvester_names["farming:melon_8"]	= true
-	harvester_names["farming:onion_5"]	= true
-	harvester_names["farming:pepper_5"]	= true
-	harvester_names["farming:pineapple_8"]	= true
-	harvester_names["farming:potato_4"]	= true
-	harvester_names["farming:pumpkin_8"]	= true
-	harvester_names["farming:raspberry_4"]	= true
-	harvester_names["farming:rhubarb_3"]	= true
-	harvester_names["farming:tomato_8"]	= true
-	harvester_names["farming:grapes_8"]	= true
-	harvester_names["farming:beanpole_5"]	= true
-	harvester_names["farming:pea_5"]	= true
-	harvester_names["farming:beetroot_5"]	= true
+	farmingNG.harvester_names["farming:wheat_8"] = true 
+	farmingNG.harvester_names["farming:cotton_8"] = true
+	farmingNG.harvester_names["farming:weed"] 	= false
+    farmingNG.harvester_names["farming:pumpkin"]	= true
+	farmingNG.harvester_names["farming:barley_7"]	= true
+	farmingNG.harvester_names["farming:blueberry_4"]	= true
+	farmingNG.harvester_names["farming:carrot_8"]	= true
+	farmingNG.harvester_names["farming:chili_8"]	= true
+	farmingNG.harvester_names["farming:coffee_5"]	= true
+	farmingNG.harvester_names["farming:corn_8"]	= true
+	farmingNG.harvester_names["farming:cucumber_4"]	= true
+	farmingNG.harvester_names["farming:garlic_5"]	= true
+	farmingNG.harvester_names["farming:hemp_8"]	= true
+	farmingNG.harvester_names["farming:melon_8"]	= true
+	farmingNG.harvester_names["farming:onion_5"]	= true
+	farmingNG.harvester_names["farming:pepper_5"]	= true
+	farmingNG.harvester_names["farming:pineapple_8"]	= true
+	farmingNG.harvester_names["farming:potato_4"]	= true
+	farmingNG.harvester_names["farming:pumpkin_8"]	= true
+	farmingNG.harvester_names["farming:raspberry_4"]	= true
+	farmingNG.harvester_names["farming:rhubarb_3"]	= true
+	farmingNG.harvester_names["farming:tomato_8"]	= true
+	farmingNG.harvester_names["farming:grapes_8"]	= true
+	farmingNG.harvester_names["farming:beanpole_5"]	= true
+	farmingNG.harvester_names["farming:pea_5"]	= true
+	farmingNG.harvester_names["farming:beetroot_5"]	= true
 
     -- beer_test
-    harvester_names["beer_test:oats_8"]	= true
+    farmingNG.harvester_names["beer_test:oats_8"]	= true
 
     -- farming_plus
-    harvester_names["farming_plus:melon"]	= true
-	harvester_names["farming_plus:tomato"] = true
-	harvester_names["farming_plus:chilli"] = true
-	harvester_names["farming_plus:garlic"] = true
-	harvester_names["farming_plus:soy_plant"] = true
-	harvester_names["farming_plus:cucumber"] = true
-	harvester_names["farming_plus:coffee"] = true
-	harvester_names["farming_plus:potato"] = true
-	harvester_names["farming_plus:carrot"] = true
-	harvester_names["farming_plus:garlic"] = true
-	harvester_names["farming_plus:rhubarb"]= true
-	harvester_names["farming_plus:barley_7"]= true
-	harvester_names["farming_plus:hemp_8"]= true
-	harvester_names["farming_plus:beanpole_5"]= true
-	harvester_names["farming_plus:grapes_8"]= true
-	harvester_names["farming_plus:corn"]	= true
-	harvester_names["farming_plus:cornb"]	= true
-	harvester_names["farming_plus:cornc"]	= true
-
-if (minetest.get_modpath("cucina_vegana")) then
-
-    -- cucina_vegana
-    harvester_names["cucina_vegana:soy_8"]	= true
-    harvester_names["cucina_vegana:parsley_5"]	= true
-    harvester_names["cucina_vegana:lettuce_5"]	= true
-    harvester_names["cucina_vegana:chives_5"]	= true
-    harvester_names["cucina_vegana:rosemary_6"]	= true
-    harvester_names["cucina_vegana:sunflower_5"]	= true
-    harvester_names["cucina_vegana:kohlrabi_6"]	= true
-    harvester_names["cucina_vegana:asparagus_6"]	= true
-    harvester_names["cucina_vegana:rice_6"]	= true
+    farmingNG.harvester_names["farming_plus:melon"]	= true
+	farmingNG.harvester_names["farming_plus:tomato"] = true
+	farmingNG.harvester_names["farming_plus:chilli"] = true
+	farmingNG.harvester_names["farming_plus:garlic"] = true
+	farmingNG.harvester_names["farming_plus:soy_plant"] = true
+	farmingNG.harvester_names["farming_plus:cucumber"] = true
+	farmingNG.harvester_names["farming_plus:coffee"] = true
+	farmingNG.harvester_names["farming_plus:potato"] = true
+	farmingNG.harvester_names["farming_plus:carrot"] = true
+	farmingNG.harvester_names["farming_plus:garlic"] = true
+	farmingNG.harvester_names["farming_plus:rhubarb"]= true
+	farmingNG.harvester_names["farming_plus:barley_7"]= true
+	farmingNG.harvester_names["farming_plus:hemp_8"]= true
+	farmingNG.harvester_names["farming_plus:beanpole_5"]= true
+	farmingNG.harvester_names["farming_plus:grapes_8"]= true
+	farmingNG.harvester_names["farming_plus:corn"]	= true
+	farmingNG.harvester_names["farming_plus:cornb"]	= true
+	farmingNG.harvester_names["farming_plus:cornc"]	= true
     
-end
-
 if not farmingNG.havetech then
       farmingNG.harvester_charge_per_node = math.floor(65535 / farmingNG.harvester_max_charge * farmingNG.harvester_charge_per_node)
       farmingNG.harvester_max_charge = 65535
@@ -98,7 +82,7 @@ local function recursive_harvest(pos, remaining_charge)
 	end
 	local node = minetest.get_node(pos)
 
-	if not harvester_names[node.name] then
+	if not farmingNG.harvester_names[node.name] then
 		return remaining_charge
 	end
 
@@ -113,7 +97,7 @@ local function recursive_harvest(pos, remaining_charge)
 		if remaining_charge < farmingNG.harvester_charge_per_node then
 			break
 		end
-		if harvester_names[minetest.get_node(npos).name] then
+		if farmingNG.harvester_names[minetest.get_node(npos).name] then
 			remaining_charge = recursive_harvest(npos, remaining_charge)
 		end
 	end

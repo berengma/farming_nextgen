@@ -4,9 +4,9 @@
 --**** was taken from technic:chainsaw mod coded by
 --**** Maciej Kasatkin (RealBadAngel)
 --*******************************************************
+
 local farm_redo = false
-
-
+      
 -- different values if technic not present
 if not farmingNG.havetech then
       farmingNG.seeder_charge_per_node = math.floor(65535 / farmingNG.seeder_max_charge * farmingNG.seeder_charge_per_node)
@@ -78,7 +78,7 @@ end
 
 
 
-local seeder_seed = {
+farmingNG.seeder_seed = {
 -- *** farming
 	    {"farming:seed_barley", "farming:barley_1"},
 	    {"farming:seed_hemp", "farming:hemp_1"},
@@ -136,36 +136,10 @@ local seeder_seed = {
 --	    {"farming:seed_cotton", "farming:seed_cotton"}
 	    
 }
-
-
-if (minetest.get_modpath("cucina_vegana")) then
-    
--- *** cucina_vegana
-        table.insert(seeder_seed, {"cucina_vegana:seed_soy", "cucina_vegana:soy_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_parsley", "cucina_vegana:parsley_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_lettuce", "cucina_vegana:lettuce_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_chives", "cucina_vegana:chives_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_rosemary", "cucina_vegana:rosemary_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_sunflower", "cucina_vegana:sunflower_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_kohlrabi", "cucina_vegana:kohlrabi_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_asparagus", "cucina_vegana:asparagus_1"})
-        table.insert(seeder_seed, {"cucina_vegana:seed_rice", "cucina_vegana:rice_1"})
-
-        table.insert(seeder_seed, {"cucina_vegana:soy_seed", "cucina_vegana:soy_1"})
-        table.insert(seeder_seed, {"cucina_vegana:parsley_seed", "cucina_vegana:parsley_1"})
-        table.insert(seeder_seed, {"cucina_vegana:lettuce_seed", "cucina_vegana:lettuce_1"})
-        table.insert(seeder_seed, {"cucina_vegana:chives_seed", "cucina_vegana:chives_1"})
-        table.insert(seeder_seed, {"cucina_vegana:rosemary_seed", "cucina_vegana:rosemary_1"})
-        table.insert(seeder_seed, {"cucina_vegana:sunflower_seed", "cucina_vegana:sunflower_1"})
-        table.insert(seeder_seed, {"cucina_vegana:kohlrabi_seed", "cucina_vegana:kohlrabi_1"})
-        table.insert(seeder_seed, {"cucina_vegana:asparagus_seed", "cucina_vegana:asparagus_1"})
-        table.insert(seeder_seed, {"cucina_vegana:rice_seed", "cucina_vegana:rice_1"})
-    
-end
-
+   
 -- wine and beans need climbing utilities
  
-local seeder_utils = {
+farmingNG.seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
   {"farming_nextgen:bean_seedling", "farming_plus:beanpole_1"}
 }
@@ -180,8 +154,8 @@ end
 
 
 local function check_valid_util(sname)
-     for i in ipairs(seeder_utils) do
-      if sname == seeder_utils[i][1] then return true end
+     for i in ipairs(farmingNG.seeder_utils) do
+      if sname == farmingNG.seeder_utils[i][1] then return true end
      end
     return false
 end
@@ -191,8 +165,8 @@ end
 -- function to check for valid seeds
 local function check_valid_seed(sname)
   
-    for i in ipairs(seeder_seed) do
-      if sname == seeder_seed[i][1] then return true end
+    for i in ipairs(farmingNG.seeder_seed) do
+      if sname == farmingNG.seeder_seed[i][1] then return true end
     end
     return false
 end
@@ -201,8 +175,8 @@ end
 local function give_seedling(sname, util)
 
      if not util then
-	  for i in ipairs(seeder_seed) do
-	    if sname == seeder_seed[i][1] then return seeder_seed[i][2] end
+	  for i in ipairs(farmingNG.seeder_seed) do
+	    if sname == farmingNG.seeder_seed[i][1] then return farmingNG.seeder_seed[i][2] end
 	  end
      else
 	  for i in ipairs(seeder_utils) do
