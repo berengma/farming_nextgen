@@ -13,6 +13,7 @@ farmingNG.harvester_names = {}
 
 function farmingNG.register_seed(seed, plant)
     if(seed ~= "" and plant ~= "") then
+       local new_seed = {}
        new_seed = {seed, plant}
        table.insert(farmingNG.seeder_seed, new_seed)
        return true
@@ -28,6 +29,7 @@ end -- register_seed
 
 function farmingNG.register_util(seedling, util)
     if(seedling ~= "" and util ~= "") then
+        local new_util = {}
         new_util = {seedling, util}
        table.insert(farmingNG.seeder_utils, new_util)
        return true
@@ -72,4 +74,8 @@ if farmingNG.havetech then
 	-- compatibility alias
 	minetest.register_alias("technic:seeder", "farming_nextgen:seeder")
 end
+
+
+print("[MOD] " .. minetest.get_current_modname() .. " loaded.")
+
 
