@@ -4,9 +4,9 @@
 --**** was taken from technic:chainsaw mod coded by
 --**** Maciej Kasatkin (RealBadAngel)
 --*******************************************************
+
 local farm_redo = false
-
-
+      
 -- different values if technic not present
 if not farmingNG.havetech then
       farmingNG.seeder_charge_per_node = math.floor(65535 / farmingNG.seeder_max_charge * farmingNG.seeder_charge_per_node)
@@ -78,7 +78,7 @@ end
 
 
 
-local seeder_seed = {
+farmingNG.seeder_seed = {
 -- *** farming
 	    {"farming:seed_barley", "farming:barley_1"},
 	    {"farming:seed_hemp", "farming:hemp_1"},
@@ -136,11 +136,10 @@ local seeder_seed = {
 --	    {"farming:seed_cotton", "farming:seed_cotton"}
 	    
 }
-
-
+   
 -- wine and beans need climbing utilities
  
-local seeder_utils = {
+farmingNG.seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
   {"farming_nextgen:bean_seedling", "farming_plus:beanpole_1"}
 }
@@ -155,8 +154,8 @@ end
 
 
 local function check_valid_util(sname)
-     for i in ipairs(seeder_utils) do
-      if sname == seeder_utils[i][1] then return true end
+     for i in ipairs(farmingNG.seeder_utils) do
+      if sname == farmingNG.seeder_utils[i][1] then return true end
      end
     return false
 end
@@ -166,8 +165,8 @@ end
 -- function to check for valid seeds
 local function check_valid_seed(sname)
   
-    for i in ipairs(seeder_seed) do
-      if sname == seeder_seed[i][1] then return true end
+    for i in ipairs(farmingNG.seeder_seed) do
+      if sname == farmingNG.seeder_seed[i][1] then return true end
     end
     return false
 end
@@ -176,8 +175,8 @@ end
 local function give_seedling(sname, util)
 
      if not util then
-	  for i in ipairs(seeder_seed) do
-	    if sname == seeder_seed[i][1] then return seeder_seed[i][2] end
+	  for i in ipairs(farmingNG.seeder_seed) do
+	    if sname == farmingNG.seeder_seed[i][1] then return farmingNG.seeder_seed[i][2] end
 	  end
      else
 	  for i in ipairs(seeder_utils) do
