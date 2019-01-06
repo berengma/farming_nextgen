@@ -2,7 +2,9 @@
 	
     -- farming
 	farmingNG.harvester_names["farming:wheat_8"] = true 
+	farmingNG.harvester_names["farming:wheat_8"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:cotton_8"] = true
+	farmingNG.harvester_names["farming:cotton_7"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:weed"] 	= false
     farmingNG.harvester_names["farming:pumpkin"]	= true
 	farmingNG.harvester_names["farming:barley_7"]	= true
@@ -27,7 +29,13 @@
 	farmingNG.harvester_names["farming:beanpole_5"]	= true
 	farmingNG.harvester_names["farming:pea_5"]	= true
 	farmingNG.harvester_names["farming:beetroot_5"]	= true
-
+	farmingNG.harvester_names["farming:rice_8"] = true
+	farmingNG.harvester_names["farming:rice_7"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:oat_8"] = true
+	farmingNG.harvester_names["farming:oat_7"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:rye_8"] = true
+	farmingNG.harvester_names["farming:rye_7"] = farmingNG.harvester_nofullg
+	
     -- beer_test
     farmingNG.harvester_names["beer_test:oats_8"]	= true
 

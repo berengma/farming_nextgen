@@ -15,4 +15,5 @@ farmingNG.easy = false						-- easy recipe if technic mod is present
 farmingNG.harvester_max_charge      = 650000 			-- Maximum charge of the harvester
 farmingNG.harvester_charge_per_node = 1300 			-- Costs of harvesting one node
 farmingNG.harvester_machine 	= true				-- make the tool available
+farmingNG.harvester_nofullg     = true				-- harvests also wheat_7, rice_7 etc no need to wait until full grown 
 
