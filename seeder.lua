@@ -266,7 +266,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	end	
 	
 	if not check_valid_util(seedname) then
-	      if upper.name == "air" or upper.name == "farming:weed" then
+	      if upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")then
 		    minetest.set_node(uppos, {name="air"})
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
@@ -281,7 +281,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    return remaining_charge, seednum, seedstack
 	      end
 	else
-	     if (upper.name == "air" or upper.name == "farming:weed") and top.name == "air" then 
+	     if (upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")) and top.name == "air" then 
 		    minetest.set_node(uppos, {name="air"})
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
