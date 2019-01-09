@@ -8,8 +8,10 @@
 	farmingNG.harvester_names["farming:cotton_7"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:cotton_6"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:weed"] 	= false
-    farmingNG.harvester_names["farming:pumpkin"]	= true
+	farmingNG.harvester_names["farming:pumpkin"]	= true
 	farmingNG.harvester_names["farming:barley_7"]	= true
+	farmingNG.harvester_names["farming:barley_6"]	= farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:barley_5"]	= farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:blueberry_4"]	= true
 	farmingNG.harvester_names["farming:carrot_8"]	= true
 	farmingNG.harvester_names["farming:chili_8"]	= true
