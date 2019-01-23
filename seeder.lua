@@ -148,7 +148,7 @@ farmingNG.seeder_utils = {
 }
       
 if farm_redo then
-      seeder_utils = {
+     farmingNG.seeder_utils = {
       {"farming_nextgen:grape_seedling", "farming:grapes_1"},
       {"farming_nextgen:bean_seedling", "farming:beanpole_1"}
       }
@@ -182,8 +182,8 @@ local function give_seedling(sname, util)
 	    if sname == farmingNG.seeder_seed[i][1] then return farmingNG.seeder_seed[i][2] end
 	  end
      else
-	  for i in ipairs(seeder_utils) do
-	    if sname == seeder_utils[i][1] then return seeder_utils[i][2] end
+	  for i in ipairs(farmingNG.seeder_utils) do
+	    if sname ==farmingNG.seeder_utils[i][1] then return farmingNG.seeder_utils[i][2] end
 	  end
      end
     return nil
