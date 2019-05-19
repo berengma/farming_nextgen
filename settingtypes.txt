@@ -1,0 +1,30 @@
+#farmingNG settings
+
+#maximum charge of the seeder, lower values mean faster load if technic present
+farmingNG_seeder_max_charge (Maximum charge of the seeder) int  900000
+
+#costs to place a seed: maxcharge devided by charge_per_node = number of
+#nodes which can be placed (default 900000 / 1800 = 500 nodes)
+farmingNG_seeder_charge_per_node (How much it costs to place a seed) int 1800
+
+#more verbose, tells you how many seeds were used and more
+farmingNG_chaton (more verbose chat messages) bool false
+
+#less expensive recipe if technic mod is present
+farmingNG_easy (easy recipe if technic mod is present) bool false
+
+#maximum charge of the harvster, lower values mean faster load if technic present
+farmingNG_harvester_max_charge (Maximum charge of the harvester) int 650000 
+
+#costs to place a seed: maxcharge devided by charge_per_node = number of
+#nodes which can be harvested (default 650000 / 1300 = 500 nodes)
+farmingNG_harvester_charge_per_node (Costs of harvesting one node) int 1300
+
+#plants like wheat, rice, oat etc do not grow equally but already give drops
+#if only 90% grown, set to false if you only want to harvest 100% grown nodes
+farmingNG_harvester_nofullg (harvest not already fully grown) bool true
+
+#set to false if you you do not need the harvester
+farmingNG_harvester_machine (harvester tool available) bool true
+
+
