@@ -101,6 +101,9 @@ farmingNG.seeder_seed = {
 	    {"farming:blueberries", "farming:blueberry_1"},
 	    {"farming:pea_pod", "farming:pea_1"},
 	    {"farming:beetroot", "farming:beetroot_1"},
+	    {"farming:seed_rice", "farming:rice_1"},
+	    {"farming:seed_oat", "farming:oat_1"},
+	    {"farming:seed_rye", "farming:rye_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
@@ -145,7 +148,7 @@ farmingNG.seeder_utils = {
 }
       
 if farm_redo then
-      seeder_utils = {
+     farmingNG.seeder_utils = {
       {"farming_nextgen:grape_seedling", "farming:grapes_1"},
       {"farming_nextgen:bean_seedling", "farming:beanpole_1"}
       }
@@ -179,8 +182,8 @@ local function give_seedling(sname, util)
 	    if sname == farmingNG.seeder_seed[i][1] then return farmingNG.seeder_seed[i][2] end
 	  end
      else
-	  for i in ipairs(seeder_utils) do
-	    if sname == seeder_utils[i][1] then return seeder_utils[i][2] end
+	  for i in ipairs(farmingNG.seeder_utils) do
+	    if sname ==farmingNG.seeder_utils[i][1] then return farmingNG.seeder_utils[i][2] end
 	  end
      end
     return nil
@@ -263,7 +266,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	end	
 	
 	if not check_valid_util(seedname) then
-	      if upper.name == "air" or upper.name == "farming:weed" then
+	      if upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")then
 		    minetest.set_node(uppos, {name="air"})
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
@@ -278,7 +281,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		    return remaining_charge, seednum, seedstack
 	      end
 	else
-	     if (upper.name == "air" or upper.name == "farming:weed") and top.name == "air" then 
+	     if (upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")) and top.name == "air" then 
 		    minetest.set_node(uppos, {name="air"})
 		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 		    seednum = seednum +1
