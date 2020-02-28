@@ -1,0 +1,22 @@
+# textdomain: farming_nextgen
+
+
+### harvester.lua ###
+
+Harvester=
+
+### harvester.lua ###
+### seeder.lua ###
+
+ *** Your device needs to be serviced=
+
+### seeder.lua ###
+
+ *** you need valid seeds on the right side of your device=
+*** You used :  @1 seeds=
+*** You used : @1 seeds.=
+A bean seedling for the seeder=
+A grape seedling for the seeder=
+Automatik seeding tool=
+Charge for @1 seeds left.=
+Seed Machine=

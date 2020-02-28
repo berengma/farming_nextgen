@@ -1,0 +1,22 @@
+# textdomain: farming_nextgen
+
+
+### harvester.lua ###
+
+Harvester=Erntemaschine
+
+### harvester.lua ###
+### seeder.lua ###
+
+ *** Your device needs to be serviced= *** Dein Gerät muß repariert werden
+
+### seeder.lua ###
+
+ *** you need valid seeds on the right side of your device= *** du brauchst gültige Samen an der rechten Seite deines Gerätes
+*** You used :  @1 seeds=*** Du brauchtest : @1 Samen
+*** You used : @1 seeds.=*** Du brauchtest : @1 Samen.
+A bean seedling for the seeder=Ein Bohnensetzling für die Saatmaschine
+A grape seedling for the seeder=Ein Traubensetzling für die Saatmaschine
+Automatik seeding tool=Automatische Saatmaschine
+Charge for @1 seeds left.=Insgesamt noch @1 Samen über.
+Seed Machine=Saatmaschine
