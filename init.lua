@@ -3,6 +3,12 @@
 farmingNG = {}
 local path = minetest.get_modpath(minetest.get_current_modname())
 
+if(minetest.get_translator ~= nil) then
+    farmingNG.S = minetest.get_translator(minetest.get_current_modname())
+else
+    farmingNG.S = function ( s ) return s end
+end
+
 farmingNG.seeder_seed = {}
 farmingNG.seeder_utils = {}
 farmingNG.harvester_names = {}

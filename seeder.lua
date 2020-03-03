@@ -6,6 +6,7 @@
 --*******************************************************
 
 local farm_redo = false
+local S = farmingNG.S
       
 -- different values if technic not present
 if not farmingNG.havetech then
@@ -22,12 +23,12 @@ end
 if minetest.get_modpath("farming_plus") or farm_redo then
   
       minetest.register_craftitem("farming_nextgen:grape_seedling", {
-	    description = "A grape seedling for the seeder",
+	    description = S("A grape seedling for the seeder"),
 	    inventory_image = "farming_grapes_1.png"
       })
 
       minetest.register_craftitem("farming_nextgen:bean_seedling", {
-	    description = "A bean seedling for the seeder",
+	    description = S("A bean seedling for the seeder"),
 	    inventory_image = "farming_beanpole_1.png"
       })
       
@@ -322,7 +323,7 @@ end
 
 if farmingNG.havetech then
   
-	  local S = technic.getter
+	  --local S = technic.getter
 
 	  technic.register_power_tool("farming_nextgen:seeder", farmingNG.seeder_max_charge)
 
@@ -367,15 +368,15 @@ if farmingNG.havetech then
 			    
 			    if check_valid_seed(seedname) or check_valid_util(seedname) then
 				meta.charge, seednum, seedstack = seeder_dig(pointed_thing.under, meta.charge, seednum, seedstack, user)
-				minetest.chat_send_player(name,"*** You used :  "..seednum.." seeds")
+				minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
 			    else
-				minetest.chat_send_player(name," *** you need valid seeds on the right side of your device")
+				minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 			    end
 			    
 			    
 			      
 			  else
-			      minetest.chat_send_player(name," *** you need valid seeds on the right side of your device")
+			      minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 			  end
 			  
 			  if not technic.creative_mode then
@@ -416,7 +417,7 @@ else
 	      
 	  
 	  minetest.register_tool("farming_nextgen:seeder", {
-		  description = "Automatik seeding tool",
+		  description = S("Automatik seeding tool"),
 		  groups = {soil=3,soil=2},
 		  inventory_image = "farming_nextgen_seeder.png",
 		  stack_max=1,
@@ -435,7 +436,7 @@ else
 			  
 			  if not charge or  
 					  charge < farmingNG.seeder_charge_per_node then
-					  minetest.chat_send_player(name," *** Your device needs to be serviced")
+					  minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
 				  return
 			  end
 
@@ -457,13 +458,15 @@ else
 			    if check_valid_seed(seedname) or check_valid_util(seedname) then
 				charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
 				if farmingNG.chaton then
-				     minetest.chat_send_player(name,"*** You used :  "..seednum.." seeds     ".."Charge for "..math.floor(charge/farmingNG.seeder_charge_per_node).." seeds left")
+				     minetest.chat_send_player(name,S("*** You used : @1 seeds.",seednum) .. "\n" .. 
+                                                    S("Charge for @1 seeds left.",math.floor(charge/farmingNG.seeder_charge_per_node))
+                                              )
 				end
 			    else
-				minetest.chat_send_player(name," *** you need valid seeds on the right side of your device")
+				minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 			    end
 			  else
-			      minetest.chat_send_player(name," *** you need valid seeds on the right side of your device")
+			      minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 			  end
 			  
 			  

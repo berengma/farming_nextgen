@@ -1,5 +1,7 @@
 -- The harvester
-	
+
+local S = farmingNG.S
+
     -- farming
 	farmingNG.harvester_names["farming:wheat_8"] = true 
 	farmingNG.harvester_names["farming:wheat_7"] = farmingNG.harvester_nofullg
@@ -182,8 +184,6 @@ end
 
 if farmingNG.havetech then	
 		    
-	  local S = technic.getter
-
 	  technic.register_power_tool("farming_nextgen:harvester", farmingNG.harvester_max_charge)
 
 
@@ -244,7 +244,7 @@ else
 
 		    
 		    minetest.register_tool("farming_nextgen:harvester", {
-			    description = "Harvester",
+			    description = S("Harvester"),
 			    groups = {soil=3,soil=2},
 			    inventory_image = "farming_nextgen_harvester.png",
 			    stack_max=1,
@@ -263,7 +263,7 @@ else
 				    
 				    if not charge or  
 						    charge < farmingNG.harvester_charge_per_node then
-						    minetest.chat_send_player(name," *** Your device needs to be serviced")
+						    minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
 					    return
 				    end
 
