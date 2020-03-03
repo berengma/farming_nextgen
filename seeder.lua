@@ -64,10 +64,12 @@ end
 
 -- The default soils
 local soil_nodenames = {
-	["farming:soil"] 	 	= true,
-	["farming:soil_wet"] 		= true,
+	["farming:soil"] 	 			= true,
+	["farming:soil_wet"] 			= true,
 	["farming:desert_sand_soil"]    = true,
-	["farming:desert_sand_soil_wet"]= true
+	["farming:desert_sand_soil_wet"]= true,
+	["farming:dry_soil"]			= true,
+	["farming:dry_soil_wet"]		= true
 }
 
 
@@ -316,7 +318,7 @@ end
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	-- Start sawing things down
 	local remaining_charge, seednum, seedstack = recursive_dig(pos, current_charge, seednum, seedstack, user)
-	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 1.0, max_hear_distance = 10})
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 0.1, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
 

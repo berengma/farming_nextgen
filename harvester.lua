@@ -159,7 +159,7 @@ end
 local function harvester_dig(pos, current_charge)
 	-- Start sawing things down
 	local remaining_charge = recursive_harvest(pos, current_charge)
-	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 1.0,
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 0.1,
 			max_hear_distance = 10})
 
 	-- Now drop items for the player
