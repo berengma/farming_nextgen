@@ -161,7 +161,7 @@ end
 local function harvester_dig(pos, current_charge)
 	-- Start sawing things down
 	local remaining_charge = recursive_harvest(pos, current_charge)
-	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 0.1,
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain,
 			max_hear_distance = 10})
 
 	-- Now drop items for the player
@@ -211,8 +211,8 @@ if farmingNG.havetech then
 			  end
 
 			  
-			  if minetest.is_protected(pointed_thing.under, name) then
-				  minetest.record_protection_violation(pointed_thing.under, name)
+			  if minetest.is_protected(pointed_thing.above, name) then
+				  minetest.record_protection_violation(pointed_thing.above, name)
 				  return
 			  end
 
@@ -269,8 +269,8 @@ else
 					    return
 				    end
 
-				    if minetest.is_protected(pointed_thing.under, name) then
-					    minetest.record_protection_violation(pointed_thing.under, name)
+				    if minetest.is_protected(pointed_thing.above, name) then
+					    minetest.record_protection_violation(pointed_thing.above, name)
 					    return
 				    end
 				    

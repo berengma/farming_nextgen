@@ -27,4 +27,7 @@ farmingNG_harvester_nofullg (harvest not already fully grown) bool true
 #set to false if you you do not need the harvester
 farmingNG_harvester_machine (harvester tool available) bool true
 
+#control sound volume >1 loud, <1 quiet
+farmingNG_gain (sound volume) float 0.5
+
 

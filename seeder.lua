@@ -320,7 +320,7 @@ end
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	-- Start sawing things down
 	local remaining_charge, seednum, seedstack = recursive_dig(pos, current_charge, seednum, seedstack, user)
-	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = 0.1, max_hear_distance = 10})
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
 
@@ -361,8 +361,8 @@ if farmingNG.havetech then
 
 			  
 			  
-			  if minetest.is_protected(pointed_thing.under, name) then
-				  minetest.record_protection_violation(pointed_thing.under, name)
+			  if minetest.is_protected(pointed_thing.above, name) then
+				  minetest.record_protection_violation(pointed_thing.above, name)
 				  return
 			  end
 
@@ -451,8 +451,8 @@ else
 
 			  
 			  
-			  if minetest.is_protected(pointed_thing.under, name) then
-				  minetest.record_protection_violation(pointed_thing.under, name)
+			  if minetest.is_protected(pointed_thing.above, name) then
+				  minetest.record_protection_violation(pointed_thing.above, name)
 				  return
 			  end
 

@@ -82,6 +82,6 @@ if farmingNG.havetech then
 end
 
 
-print("[MOD] " .. minetest.get_current_modname() .. " loaded.")
+print("[MOD] FarmingNG alias" .. minetest.get_current_modname() .. " loaded.")
 
 
