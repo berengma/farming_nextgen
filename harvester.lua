@@ -211,8 +211,10 @@ if farmingNG.havetech then
 			  end
 
 			  
-			  if minetest.is_protected(pointed_thing.above, name) then
-				  minetest.record_protection_violation(pointed_thing.above, name)
+			  local pos_above_soil = vector.add(pointed_thing.under,
+			                                    { x = 0, y = 1, z = 0 })
+			  if minetest.is_protected(pos_above_soil, name) then
+				  minetest.record_protection_violation(pos_above_soil, name)
 				  return
 			  end
 
@@ -269,8 +271,10 @@ else
 					    return
 				    end
 
-				    if minetest.is_protected(pointed_thing.above, name) then
-					    minetest.record_protection_violation(pointed_thing.above, name)
+        		    local pos_above_soil = vector.add(pointed_thing.under,
+			                                        { x = 0, y = 1, z = 0 })
+				    if minetest.is_protected(pos_above_soil, name) then
+					    minetest.record_protection_violation(pos_above_soil, name)
 					    return
 				    end
 				    
