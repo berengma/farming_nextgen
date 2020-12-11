@@ -109,6 +109,8 @@ farmingNG.seeder_seed = {
 		{"farming:seed_rye", "farming:rye_1"},
 		{"farming:cabbage", "farming:cabbage_1"},
 		{"farming:seed_mint", "farming:mint_1"},
+		{"farming:blackberry", "farming:blackberry_1"},
+		{"farming:lettuce", "farming:lettuce_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
