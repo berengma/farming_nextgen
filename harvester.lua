@@ -48,6 +48,10 @@ local S = farmingNG.S
 	farmingNG.harvester_names["farming:mint_4"] = true
 	farmingNG.harvester_names["farming:lettuce_5"] = true
 	farmingNG.harvester_names["farming:blackberry_4"] = true
+	farmingNG.harvester_names["farming:soy_7"] = true
+	farmingNG.harvester_names["farming:soy_6"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:vanilla_8"] = true
+	farmingNG.harvester_names["farming:vanilla_7"] = farmingNG.harvester_nofullg
 	
     -- beer_test
     farmingNG.harvester_names["beer_test:oats_8"]	= true
