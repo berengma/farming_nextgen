@@ -24,7 +24,9 @@ local S = farmingNG.S
 	farmingNG.harvester_names["farming:hemp_8"]	= true
 	farmingNG.harvester_names["farming:melon_8"]	= true
 	farmingNG.harvester_names["farming:onion_5"]	= true
-	farmingNG.harvester_names["farming:pepper_5"]	= true
+	farmingNG.harvester_names["farming:pepper_5"]	= true					-- green
+	farmingNG.harvester_names["farming:pepper_6"]	= true					-- yellow
+	farmingNG.harvester_names["farming:pepper_7"]	= true					-- red
 	farmingNG.harvester_names["farming:pineapple_8"]	= true
 	farmingNG.harvester_names["farming:potato_4"]	= true
 	farmingNG.harvester_names["farming:pumpkin_8"]	= true
@@ -48,6 +50,10 @@ local S = farmingNG.S
 	farmingNG.harvester_names["farming:mint_4"] = true
 	farmingNG.harvester_names["farming:lettuce_5"] = true
 	farmingNG.harvester_names["farming:blackberry_4"] = true
+	farmingNG.harvester_names["farming:soy_6"]	= farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:soy_7"]	= true
+	farmingNG.harvester_names["farming:vanilla_7"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:vanilla_8"] = true
 	
     -- beer_test
     farmingNG.harvester_names["beer_test:oats_8"]	= true
