@@ -83,6 +83,7 @@ end
 
 farmingNG.seeder_seed = {
 -- *** farming
+		{"farming:artichoke", "farming:artichoke_1"},
 		{"farming:seed_barley", "farming:barley_1"},
 		{"farming:seed_hemp", "farming:hemp_1"},
 		{"farming:pumpkin_seed", "farming:pumpkin_1"},
@@ -94,6 +95,7 @@ farmingNG.seeder_seed = {
 		{"farming:garlic_clove", "farming:garlic_1"},
 		{"farming:melon_slice", "farming:melon_1"},
 		{"farming:onion", "farming:onion_1"},
+		{"farming:parsley", "farming:parsley_1"},
 		{"farming:peppercorn", "farming:pepper_1"},
 		{"farming:pineapple_top", "farming:pineapple_1"},
 		{"farming:potato", "farming:potato_1"},
