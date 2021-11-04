@@ -354,9 +354,9 @@ if farmingNG.havetech then
 			  if pointed_thing.type ~= "node" then
 				  return itemstack
 			  end
-			
+
 			  local meta = technic.plus
-			  	  and { charge = technic.get_RE_charge(itemstack) }
+				  and { charge = technic.get_RE_charge(itemstack) }
 				  or minetest.deserialize(itemstack:get_metadata())
 			  if not meta or not meta.charge or
 					  meta.charge < farmingNG.seeder_charge_per_node then
@@ -396,12 +396,8 @@ if farmingNG.havetech then
 			  end
 			  
 			  if not technic.creative_mode then
-				  if technic.plus then
-					technic.set_RE_charge(itemstack, meta.charge)
-				  else
-				  	technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
-				  	itemstack:set_metadata(minetest.serialize(meta))
-				  end
+				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
+				  itemstack:set_metadata(minetest.serialize(meta))
 			  end
 			  inv:set_stack("main", indexnumber, seedstack)
 			  return itemstack
