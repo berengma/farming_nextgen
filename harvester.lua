@@ -195,7 +195,40 @@ local function harvester_dig(pos, current_charge)
 end
 
 
-if farmingNG.havetech then	
+if farmingNG.havetech then
+	if technic.plus then
+		technic.register_power_tool("farming_nextgen:harvester", {
+			description = S("Harvester"),
+			inventory_image = "farming_nextgen_harvester.png",
+			max_charge = farmingNG.harvester_max_charge,
+			on_use = function(itemstack, user, pointed_thing)
+				local name = user:get_player_name()
+
+				if pointed_thing.type ~= "node" then
+					return
+				end
+
+				local charge = technic.get_RE_charge(itemstack)
+				if charge < farmingNG.harvester_charge_per_node then
+					return
+				end
+
+				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
+				if minetest.is_protected(pos_above_soil, name) then
+					minetest.record_protection_violation(pos_above_soil, name)
+					return
+				end
+
+				-- Send current charge to digging function so that the
+				-- harvester will stop after digging a number of nodes
+				charge = harvester_dig(pointed_thing.under, charge)
+				if not technic.creative_mode then
+					technic.set_RE_charge(itemstack, charge)
+					return itemstack
+				end
+			end,
+		})
+	else
 		    
 	  technic.register_power_tool("farming_nextgen:harvester", farmingNG.harvester_max_charge)
 
@@ -242,17 +275,19 @@ if farmingNG.havetech then
 		  end,
 	  })
 
-	  local mesecons_button = minetest.get_modpath("mesecons_button")
-	  local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
+	end
 
-	  minetest.register_craft({
-		  output = "farming_nextgen:harvester",
-		  recipe = {
-			  {"technic:battery", trigger,                      "technic:battery"},
-			  {"technic:diamond_drill_head",      "technic:machine_casing",              "technic:diamond_drill_head"},
-			  {"technic:rubber",                              "",                           "technic:rubber"},
-		  }
-	  })
+	local mesecons_button = minetest.get_modpath("mesecons_button")
+	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
+
+	minetest.register_craft({
+		output = "farming_nextgen:harvester",
+		recipe = {
+			{"technic:battery",            trigger,                  "technic:battery"},
+			{"technic:diamond_drill_head", "technic:machine_casing", "technic:diamond_drill_head"},
+			{"technic:rubber",             "",                       "technic:rubber"},
+		}
+	})
 
 
 else
