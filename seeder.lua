@@ -333,6 +333,59 @@ end
 
 
 if farmingNG.havetech then
+	if technic.plus then
+		technic.register_power_tool("farming_nextgen:seeder", {
+			description = S("Seed Machine"),
+			inventory_image = "farming_nextgen_seeder.png",
+			max_charge = farmingNG.seeder_max_charge,
+			on_use = function(itemstack, user, pointed_thing)
+				local seednum=0
+				local name = user:get_player_name()
+				local privs = minetest.get_player_privs(name)
+
+				if pointed_thing.type ~= "node" then
+					return
+				end
+
+				local charge = technic.get_RE_charge(itemstack)
+				if charge < farmingNG.seeder_charge_per_node then
+					return
+				end
+
+				local inv = user:get_inventory()
+				local indexnumber = user:get_wield_index()+1
+				local seedstack = inv:get_stack("main", indexnumber)
+				local seedname = seedstack:get_name()
+
+				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
+				if minetest.is_protected(pos_above_soil, name) then
+					minetest.record_protection_violation(pos_above_soil, name)
+					return
+				end
+
+				-- Send current charge to digging function so that the
+				-- seeder will stop after digging a number of nodes
+				if seedname then
+
+					if check_valid_seed(seedname) or check_valid_util(seedname) then
+						charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
+						minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
+					else
+					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					end
+
+				else
+					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+				end
+
+				if not technic.creative_mode then
+					technic.set_RE_charge(itemstack, charge)
+				end
+				inv:set_stack("main", indexnumber, seedstack)
+				return itemstack
+			end,
+		})
+	else
   
 	  --local S = technic.getter
 
@@ -404,28 +457,30 @@ if farmingNG.havetech then
 		  end,
 	  })
 
-	  local mesecons_button = minetest.get_modpath("mesecons_button")
-	  local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
+	end
 
-	  if farmingNG.easy then
-		    minetest.register_craft({
-			    output = "farming_nextgen:seeder",
-			    recipe = {
-				    {"technic:battery",                                    trigger,                      "technic:battery"              },
-				    {"technic:stainless_steel_ingot",      "technic:stainless_steel_ingot",              "technic:stainless_steel_ingot"},
-				    {"default:diamond",                              "",                                 "default:diamond"},
-			    }
-		    })
-	  else
-		    minetest.register_craft({
-				    output = "farming_nextgen:seeder",
-				    recipe = {
-					    {"technic:red_energy_crystal",                                    trigger,                      "technic:red_energy_crystal"              },
-					    {"technic:composite_plate",      "technic:composite_plate",              "technic:composite_plate"},
-					    {"technic:rubber",                              "",                                 "technic:rubber"},
-				    }
-			    })
-	  end
+	local mesecons_button = minetest.get_modpath("mesecons_button")
+	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
+
+	if farmingNG.easy then
+		minetest.register_craft({
+			output = "farming_nextgen:seeder",
+			recipe = {
+				{"technic:battery",               trigger,                         "technic:battery"},
+				{"technic:stainless_steel_ingot", "technic:stainless_steel_ingot", "technic:stainless_steel_ingot"},
+				{"default:diamond",               "",                              "default:diamond"},
+			}
+		})
+	else
+		minetest.register_craft({
+			output = "farming_nextgen:seeder",
+			recipe = {
+				{"technic:red_energy_crystal", trigger,                   "technic:red_energy_crystal"},
+				{"technic:composite_plate",    "technic:composite_plate", "technic:composite_plate"},
+				{"technic:rubber",             "",                        "technic:rubber"},
+			}
+		})
+	end
 	  
 else
 	      
