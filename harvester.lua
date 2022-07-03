@@ -336,7 +336,7 @@ else
 		    minetest.register_craft({
 			    output = "farming_nextgen:harvester",
 			    recipe = {
-				    {"default:diamondblock",                                    "default:mese_crystal_fragment",                      "default:diamondblock"              },
+				    {"default:stick",                                    "default:mese_crystal_fragment",                      "default:stick"              },
 				    {"default:gold_ingot",      "default:bronze_ingot",              "default:gold_ingot"},
 				    {"default:mese_crystal_fragment",                              "",                                 "default:mese_crystal_fragment"},
 			    }
