@@ -559,7 +559,7 @@ else
 		  recipe = {
 			  {"default:mese",                                    "default:mese_crystal_fragment",                      "default:mese"              },
 			  {"default:gold_ingot",      "default:bronze_ingot",              "default:gold_ingot"},
-			  {"default:diamond",                              "",                                 "default:diamond"},
+			  {"default:stick",                              "",                                 "default:stick"},
 		  }
 	  })
 end
