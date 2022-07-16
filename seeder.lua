@@ -116,7 +116,6 @@ farmingNG.seeder_seed = {
 		{"farming:soy_pod", "farming:soy_1"},
 		{"farming:seed_sunflower", "farming:sunflower_1"},
 		{"farming:vanilla", "farming:vanilla_1"},
-		{"farming:seed_sunflower", "farming:sunflower_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
