@@ -116,6 +116,12 @@ farmingNG.seeder_seed = {
 		{"farming:soy_pod", "farming:soy_1"},
 		{"farming:seed_sunflower", "farming:sunflower_1"},
 		{"farming:vanilla", "farming:vanilla_1"},
+		{"farming:spinach", "farming:spinach_1"},
+		{"farming:ginger", "farming:ginger_1"},
+		{"farming:eggplant", "farming:eggplant_1"},
+		{"farming:asparagus", "farming:asparagus_1"},
+		-- farming redo also adds strawberry with ethereal mod name
+		{"ethereal:strawberry", "ethereal:strawberry_1"},
 	    
 -- *** farming_plus
 	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},

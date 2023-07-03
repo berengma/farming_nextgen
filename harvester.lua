@@ -57,6 +57,18 @@ local S = farmingNG.S
 	farmingNG.harvester_names["farming:sunflower_8"] = true
 	farmingNG.harvester_names["farming:vanilla_7"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["farming:vanilla_8"] = true
+	farmingNG.harvester_names["farming:spinach_3"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:spinach_4"] = true
+	farmingNG.harvester_names["farming:ginger_3"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:ginger_4"] = true
+	farmingNG.harvester_names["farming:eggplant_3"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:eggplant_4"] = true
+	farmingNG.harvester_names["farming:asparagus_4"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["farming:asparagus_5"] = true
+	-- farming redo also adds strawberry with ethereal mod name
+	farmingNG.harvester_names["ethereal:strawberry_6"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["ethereal:strawberry_7"] = farmingNG.harvester_nofullg
+	farmingNG.harvester_names["ethereal:strawberry_8"] = true
 	
     -- beer_test
     farmingNG.harvester_names["beer_test:oats_8"]	= true
