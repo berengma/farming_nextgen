@@ -72,3 +72,7 @@ farmingNG.plough_set_water_nodes =
 -- Cleanup decorations above soil
 farmingNG.plough_cleanup =
 	minetest.settings:get_bool("farmingNG_plough_cleanup_deco", true)
+
+-- Show plough position markers in seconds
+farmingNG.show_plough_pos =
+	tonumber(minetest.settings:get("farmingNG_show_plough_pos_time")) or 15
