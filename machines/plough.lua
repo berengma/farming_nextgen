@@ -1,5 +1,17 @@
 -- The plough
 
+minetest.register_entity("farming_nextgen:pos", {
+	initial_properties = {
+		visual = "cube",
+        collide_with_objects = false,                  
+		visual_size = {x=1.1, y=1.1},
+		textures = {"farming_nextgen_pos.png", "farming_nextgen_pos.png",
+			"farming_nextgen_pos.png", "farming_nextgen_pos.png",
+			"farming_nextgen_pos.png", "farming_nextgen_pos.png"},
+		collisionbox = {-0.55, -0.55, -0.55, 0.55, 0.55, 0.55},
+		physical = false,
+	}
+})
 
 local function ploughing(pos, charge)
 	if (not pos) then
@@ -106,14 +118,27 @@ else
 		    
 		    minetest.register_tool("farming_nextgen:plough", {
 			    description = S("plough"),
-			    groups = {soil=3,soil=2},
+			    groups = {soil = 2, crumbly = 1},
 			    inventory_image = "farming_nextgen_plough.png",
-			    stack_max=1,
+			    stack_max = 1,
 			    liquids_pointable = false,
+				on_place = function(itemstack, placer, pointed_thing)
+					local meta = itemstack:get_meta()
+					local current = meta:get_int("current")
+					local pos1 = minetest.deserialize(meta:get("pos1"))
+					local pos2 = minetest.deserialize(meta:get("pos2"))
+    
+					if pointed_thing.type ~= "node" then
+						return itemstack
+					end
+					if current < 2 then
+					
+					end
+				end,
+
 			    on_use = function(itemstack, user, pointed_thing)
-			      local seednum=0
 			      local name = user:get_player_name()
-				  local meta = itemstack:get_meta();
+				  local meta = itemstack:get_meta()
 			      local privs = minetest.get_player_privs(name)
 			      
 				 
