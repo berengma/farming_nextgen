@@ -119,8 +119,6 @@ if farmingNG.havetech then
 		    
 	  technic.register_power_tool("farming_nextgen:plough", farmingNG.plough_max_charge)
 
-
-
 	  minetest.register_tool("farming_nextgen:plough", {
 		  description = S("plough"),
 		  inventory_image = "farming_nextgen_plough.png",
@@ -242,35 +240,31 @@ else
 		end,
 
 	    on_use = function(itemstack, user, pointed_thing)
-	      local name = user:get_player_name()
-		  local meta = itemstack:get_meta()
-	      local privs = minetest.get_player_privs(name)
+			local name = user:get_player_name()
+			local meta = itemstack:get_meta()
+	    	local privs = minetest.get_player_privs(name)
+			local charge = 65535 - itemstack:get_wear()
+    		local pos = pointed_thing.under
 	      
-		 
 		    if pointed_thing.type ~= "node" then
 			    return itemstack
 		    end
-
-		    local charge = 65535 - itemstack:get_wear()
-		    
 		    if not charge or  
 				    charge < farmingNG.plough_charge_per_node then
-				    minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
+				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
 			    return
 		    end
-
 			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
+				minetest.chat_send_player(name, orange("You need to set positions first"))
 				return itemstack
 			end
-
-      		    local pos_above_soil = vector.add(pointed_thing.under,
-	                                        {x = 0, y = 1, z = 0})
-		    if minetest.is_protected(pos_above_soil, name) then
-			    minetest.record_protection_violation(pos_above_soil, name)
+		    if minetest.is_protected(pos, name) then
+				minetest.chat_send_player(name, orange("Parts your choosen area are already protected"))
+			    minetest.record_protection_violation(pos, name)
 			    return
 		    end
 		    
-		    charge = ploughing(pointed_thing.under, charge)
+		    charge = ploughing(pos, charge)
 		    itemstack:set_wear(65535-charge)
 		    return itemstack
 		    
