@@ -48,3 +48,27 @@ farmingNG.harvester_nofullg =
 
 -- control sound volume
 farmingNG.gain = tonumber(minetest.settings:get("farmingNG_gain")) or 0.5
+
+
+-- Plough settings
+--
+
+-- enable the plough
+farmingNG.plough_machine =
+	minetest.settings:get_bool("farmingNG_enable_plough_machine", true)
+
+-- Maximum charge of the plough 
+farmingNG.plough_max_charge =
+	tonumber(minetest.settings:get("farmingNG_plough_max_charge")) or 600000
+
+-- Costs of ploughing one node of soil
+farmingNG.plough_charge_per_node = 
+	tonumber(minetest.settings:get("farmingNG_plough_charge_per_node")) or 2000
+
+-- auto set water nodes for soil
+farmingNG.plough_set_water_nodes =
+	minetest.settings:get_bool("farmingNG_plough_auto_set_water_node", true)
+
+-- Cleanup decorations above soil
+farmingNG.plough_cleanup =
+	minetest.settings:get_bool("farmingNG_plough_cleanup_deco", true)

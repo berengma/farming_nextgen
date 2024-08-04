@@ -12,6 +12,8 @@ end
 farmingNG.seeder_seed = {}
 farmingNG.seeder_utils = {}
 farmingNG.harvester_names = {}
+farmingNG.plough_pos = {pos1 = {}, pos2 = {}}
+
 
 -- register_seed(Seed ,Plantname)
 -- Seed = fully name of the seed like "farming:seed_cotton"
@@ -47,40 +49,34 @@ end -- register_seed
 
 
 dofile(path.."/settings.lua")
-dofile(path.."/seeder.lua")
+dofile(path.."/machines/seeder.lua")
 
 if  farmingNG.harvester_machine then
-      dofile(path.."/harvester.lua")
-      
-    -- register_harvestername(plantname)
-    -- Plantname = fully Name of the plant like "farming:cotton_8"
+      dofile(path.."/machines/harvester.lua")
       
     function farmingNG.register_harvest(plantname)
         if(plantname ~= "") then
             farmingNG.harvester_names[plantname] = true
             return true
-            
-        end -- if(plantname
-        
+        end
         return false
-            
-    end -- function farmingNG.register_harvestername
-    
+    end
+
 else
     function farmingNG.register_harvestername(plantname)
         return false
-    
-    end -- function farmingNG.register_harvestername
-    
-end -- if(farmingNG.harvester_maschine
+    end
+end
 
+if farmingNG.plough_machine then
+      dofile(path.."/machines/plough.lua")
+end
 
 -- The following is only on Jungle Server valid
 if farmingNG.havetech then   
 	-- compatibility alias
 	minetest.register_alias("technic:seeder", "farming_nextgen:seeder")
 end
-
 
 print("[MOD] FarmingNG alias" .. minetest.get_current_modname() .. " loaded.")
 
