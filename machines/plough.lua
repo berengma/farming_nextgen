@@ -25,8 +25,32 @@ minetest.register_entity("farming_nextgen:pos",
 		end,
 })
 
+local function getDecorations()
+	local deco = {}
+		for name, def in pairs(minetest.registered_nodes) do
+			if def.groups["plant"] or def.groups["seed"] or def.groups["grass"] or def.groups["flower"] then
+				table.insert(deco, name)
+			end
+		end
+	return deco
+end
+
+farmingNG.deco = getDecorations()
+
 local orange = function(text)
 	return core.colorize("#ff8c00", text)
+end
+
+local green = function(text)
+	return core.colorize("#63ca00", text)
+end
+
+local function isInArea(pos, min, max)
+	if (not pos or not min or not max) then
+		return false
+	end
+	min, max = vector.sort(min, max)
+	return vector.in_area(pos, min, max)
 end
 
 local function debug(current, pos1, pos2)
@@ -55,6 +79,14 @@ local function delete_pos(pos)
 end
 
 local function is_valid(pos1, pos2, name)
+	local checkAreaDown = pos2
+	local checkAreaUp = pos1
+	if checkAreaDown and farmingNG.plough_set_water_nodes then
+		checkAreaDown = vector.add(pos2, vector.new(0, -3, 0))
+	end
+	if checkAreaUp then
+		checkAreaUp = vector.add(pos1, vector.new(0, 2, 0))
+	end
 	if not pos1 or not pos2 then
 		if name then
 			minetest.chat_send_player(name, orange("One or more positions not set."))
@@ -74,6 +106,13 @@ local function is_valid(pos1, pos2, name)
 			end
 			return false
 	end
+	if minetest.is_area_protected(checkAreaUp, checkAreaDown, name or "", 1) then
+		if name then
+			minetest.chat_send_player(name, orange("There are already protections in this area"))
+		end
+		return false
+	end 
+
 	return true
 end
 
@@ -245,6 +284,8 @@ else
 	    	local privs = minetest.get_player_privs(name)
 			local charge = 65535 - itemstack:get_wear()
     		local pos = pointed_thing.under
+			local areaMin = minetest.deserialize(meta:get("pos1"))
+			local areaMax = minetest.deserialize(meta:get("pos2"))
 	      
 		    if pointed_thing.type ~= "node" then
 			    return itemstack
@@ -258,14 +299,20 @@ else
 				minetest.chat_send_player(name, orange("You need to set positions first"))
 				return itemstack
 			end
+			if not isInArea(pos, areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("You have to click in your defined area"))
+				return
+			end
 		    if minetest.is_protected(pos, name) then
-				minetest.chat_send_player(name, orange("Parts your choosen area are already protected"))
+				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
 			    minetest.record_protection_violation(pos, name)
 			    return
 		    end
-		    
-		    charge = ploughing(pos, charge)
-		    itemstack:set_wear(65535-charge)
+		   
+			minetest.chat_send_player(name, dump(farmingNG.deco))
+
+		    --charge = ploughing(areaMin, areaMax, charge)
+		    --itemstack:set_wear(65535-charge)
 		    return itemstack
 		    
 	    end,
