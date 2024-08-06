@@ -53,6 +53,20 @@ local function isInArea(pos, min, max)
 	return vector.in_area(pos, min, max)
 end
 
+local function isAreaClean(min, max)
+	local volume = 0
+	local nodes = 0
+
+	if (not min or not max) then
+		return false
+	end
+	min, max = vector.sort(min, max)
+	volume = (1 + max.x - min.x) * (1 + max.z - min.z)
+	nodes = #minetest.find_nodes_in_area_under_air(min, max, "group:soil")
+	minetest.chat_send_all("CNT: "..volume.."  REL: "..nodes)
+	return (volume == nodes)
+end
+
 local function debug(current, pos1, pos2)
 	minetest.chat_send_all(orange("Current: "..dump(current)))
 	if pos1 then
@@ -72,10 +86,36 @@ local function delete_pos(pos)
 
 	for i = 1, #objects, 1 do
 		local obj = objects[i]
-		if (obj:get_luaentity().name == "farming_nextgen:pos") then
+		if obj and (obj:get_luaentity().name == "farming_nextgen:pos") then
 			obj:remove()
 		end
 	end
+end
+
+local function showMarkers(pos1, pos2)
+	if (not pos1 and not pos2) then
+		return
+	end
+	if pos1 then
+		delete_pos(pos1)
+		minetest.add_entity(pos1, "farming_nextgen:pos")
+	end
+	if pos2 then
+		delete_pos(pos2)
+		minetest.add_entity(pos2, "farming_nextgen:pos")
+	end
+end
+
+local function isNearArea(pos, min, max)
+	local volume = 0
+
+	if not pos or not min or not max then
+		return false
+	end
+	min, max = vector.sort(min, max)
+	volume = (1 + max.x - min.x) * (1 + max.z - min.z)
+	return ((vector.distance(pos, min) < math.sqrt(volume)) or
+			(vector.distance(pos, max) < math.sqrt(volume)))
 end
 
 local function is_valid(pos1, pos2, name)
@@ -271,8 +311,9 @@ else
 					meta:set_int("current", 2)
 					return itemstack
 				end
-				minetest.add_entity(pos1, "farming_nextgen:pos")
-				minetest.add_entity(pos2, "farming_nextgen:pos")
+				showMarkers(pos1, pos2)
+				--minetest.add_entity(pos1, "farming_nextgen:pos")
+				--minetest.add_entity(pos2, "farming_nextgen:pos")
 				meta:set_int("current", 1)
 			end
 			return itemstack
@@ -299,6 +340,9 @@ else
 				minetest.chat_send_player(name, orange("You need to set positions first"))
 				return itemstack
 			end
+			if isNearArea(pos, areaMin, areaMax) then
+				showMarkers(areaMin, areaMax)
+			end
 			if not isInArea(pos, areaMin, areaMax) then
 				minetest.chat_send_player(name, orange("You have to click in your defined area"))
 				return
@@ -308,9 +352,10 @@ else
 			    minetest.record_protection_violation(pos, name)
 			    return
 		    end
-		   
-			minetest.chat_send_player(name, dump(farmingNG.deco))
-
+		   if not isAreaClean(areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
+				return
+		   end
 		    --charge = ploughing(areaMin, areaMax, charge)
 		    --itemstack:set_wear(65535-charge)
 		    return itemstack
