@@ -54,11 +54,13 @@ local function plough(min, max, charge)
 	end
 	min, max = vector.sort(min, max)
 	x = min.x
-	while (x <= max.x) do
+	while (x <= max.x) and (charge > 9) do
 		z = min.z
-		while (z <= max.z) do
-			minetest.add_entity({x = x, y = min.y, z = z}, "farming_nextgen:pos")
+		while (z <= max.z) and (charge > 0) do
+			--minetest.add_entity({x = x, y = min.y, z = z}, "farming_nextgen:pos")
+			minetest.set_node({x = x, y = min.y, z = z}, {name = "farming:soil_wet"})
 			z = z + 1
+			charge = charge - 1
 		end
 		x = x + 1
 	end
@@ -377,7 +379,7 @@ else
 				return
 		   end
 		    charge = plough(areaMin, areaMax, charge)
-		    --itemstack:set_wear(65535-charge)
+		    itemstack:set_wear(65535-charge)
 		    return itemstack
 		    
 	    end,
