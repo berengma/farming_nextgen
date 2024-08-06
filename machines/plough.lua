@@ -45,6 +45,26 @@ local green = function(text)
 	return core.colorize("#63ca00", text)
 end
 
+local function plough(min, max, charge)
+	local x = 0
+	local z = 0
+
+	if (not min or not max) then
+		return charge
+	end
+	min, max = vector.sort(min, max)
+	x = min.x
+	while (x <= max.x) do
+		z = min.z
+		while (z <= max.z) do
+			minetest.add_entity({x = x, y = min.y, z = z}, "farming_nextgen:pos")
+			z = z + 1
+		end
+		x = x + 1
+	end
+	return charge
+end
+
 local function isInArea(pos, min, max)
 	if (not pos or not min or not max) then
 		return false
@@ -356,7 +376,7 @@ else
 				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
 				return
 		   end
-		    --charge = ploughing(areaMin, areaMax, charge)
+		    charge = plough(areaMin, areaMax, charge)
 		    --itemstack:set_wear(65535-charge)
 		    return itemstack
 		    
