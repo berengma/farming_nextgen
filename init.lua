@@ -12,8 +12,6 @@ end
 farmingNG.seeder_seed = {}
 farmingNG.seeder_utils = {}
 farmingNG.harvester_names = {}
-farmingNG.plough_pos = {pos1 = {}, pos2 = {}}
-
 
 -- register_seed(Seed ,Plantname)
 -- Seed = fully name of the seed like "farming:seed_cotton"

@@ -4,6 +4,8 @@ local S = function(T)
 	return T
 end
 
+local perNode = 65535 / (farmingNG.plough_max_charge / farmingNG.plough_charge_per_node)
+
 minetest.register_entity("farming_nextgen:pos", 
 {
 		visual = "cube",
@@ -54,15 +56,18 @@ local function plough(min, max, charge)
 	end
 	min, max = vector.sort(min, max)
 	x = min.x
-	while (x <= max.x) and (charge > 9) do
+	while (x <= max.x) and (charge > 0) do
 		z = min.z
 		while (z <= max.z) and (charge > 0) do
 			--minetest.add_entity({x = x, y = min.y, z = z}, "farming_nextgen:pos")
 			minetest.set_node({x = x, y = min.y, z = z}, {name = "farming:soil_wet"})
 			z = z + 1
-			charge = charge - 1
+			charge = charge - perNode
 		end
 		x = x + 1
+	end
+	if charge <= 0 then
+		charge = 1
 	end
 	return charge
 end
@@ -85,7 +90,7 @@ local function isAreaClean(min, max)
 	min, max = vector.sort(min, max)
 	volume = (1 + max.x - min.x) * (1 + max.z - min.z)
 	nodes = #minetest.find_nodes_in_area_under_air(min, max, "group:soil")
-	minetest.chat_send_all("CNT: "..volume.."  REL: "..nodes)
+	--minetest.chat_send_all("CNT: "..volume.."  REL: "..nodes)
 	return (volume == nodes)
 end
 
@@ -176,13 +181,6 @@ local function is_valid(pos1, pos2, name)
 	end 
 
 	return true
-end
-
-local function ploughing(pos, charge)
-	if (not pos) then
-		return charge
-	end
-	return charge
 end
 
 if farmingNG.havetech then
@@ -316,6 +314,14 @@ else
 				return itemstack
 			end
 			if current == 2 then
+				if not pos1 then
+					meta:set_string("pos1","")
+					meta:set_string("pos2","")
+					meta:set_int("current", 1)
+					delete_pos(pos1)
+					delete_pos(pos2)
+					return itemstack
+				end
 				if pos2 then
 					delete_pos(pos2)
 				end
@@ -331,11 +337,17 @@ else
 				if (not is_valid(pos1, pos2, name)) then
 					meta:set_string("pos2", "")
 					meta:set_int("current", 2)
+					if (pos1.y ~= pos2.y) and not meta:contains("posReset") then
+						meta:set_int("posReset", 1)
+					elseif (pos1.y ~= pos2.y) and meta:contains("posReset") then
+						meta:set_string("posReset", "")
+						meta:set_string("pos1", "")
+						delete_pos(pos1)
+						meta:set_int("current", 1)
+					end
 					return itemstack
 				end
 				showMarkers(pos1, pos2)
-				--minetest.add_entity(pos1, "farming_nextgen:pos")
-				--minetest.add_entity(pos2, "farming_nextgen:pos")
 				meta:set_int("current", 1)
 			end
 			return itemstack
@@ -389,7 +401,7 @@ else
 	    output = "farming_nextgen:plough",
 	    recipe = {
 		    {"default:diamondblock",			"default:mese_crystal_fragment",	"default:diamondblock"},
-		    {"default:gold_ingot",				"default:bronze_ingot",				"default:gold_ingot"},
+		    {"default:steel_ingot",				"default:tin_ingot",				"default:steel_ingot"},
 		    {"default:mese_crystal_fragment",	"",									"default:mese_crystal_fragment"},
 	    }
     })
