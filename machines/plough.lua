@@ -59,8 +59,20 @@ local function plough(min, max, charge)
 	while (x <= max.x) and (charge > 0) do
 		z = min.z
 		while (z <= max.z) and (charge > 0) do
-			--minetest.add_entity({x = x, y = min.y, z = z}, "farming_nextgen:pos")
-			minetest.set_node({x = x, y = min.y, z = z}, {name = "farming:soil_wet"})
+			local tmp = vector.new(x, min.y, z)
+			local water = vector.new(x, min.y - 1, z)
+			local sec = vector.new(x, min.y - 2, z)
+
+			--minetest.add_entity(tmp, "farming_nextgen:pos")
+			minetest.set_node(tmp, {name = "farming:soil_wet"})
+			if farmingNG.plough_set_water_nodes then
+				if (math.fmod(max.z - z, 5) == 0) and
+					not minetest.find_node_near(tmp, 4,
+					{name = 'default:water_source'}) then
+						minetest.set_node(water, {name = "default:water_source"})
+						minetest.set_node(sec, {name = "default:stone"})
+				end
+			end
 			z = z + 1
 			charge = charge - perNode
 		end
@@ -113,7 +125,7 @@ local function delete_pos(pos)
 
 	for i = 1, #objects, 1 do
 		local obj = objects[i]
-		if obj and (obj:get_luaentity().name == "farming_nextgen:pos") then
+		if obj and not obj:is_player() and (obj:get_luaentity().name == "farming_nextgen:pos") then
 			obj:remove()
 		end
 	end
@@ -248,7 +260,7 @@ if farmingNG.havetech then
 
 			  -- Send current charge to digging function so that the
 			  -- plough will stop after digging a number of nodes
-			  meta.charge = ploughing(pointed_thing.under, meta.charge)
+			  meta.charge = ploug(pointed_thing.under, meta.charge)
 			  if not technic.creative_mode then
 				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.plough_max_charge)
 				  itemstack:set_metadata(minetest.serialize(meta))
