@@ -6,6 +6,7 @@ end
 
 local perNode = 65535 / (farmingNG.plough_max_charge / farmingNG.plough_charge_per_node)
 
+
 minetest.register_entity("farming_nextgen:pos", 
 {
 		visual = "cube",
@@ -195,82 +196,188 @@ local function is_valid(pos1, pos2, name)
 	return true
 end
 
+local onPlace =  function(itemstack, placer, pointed_thing)
+   	local name = placer:get_player_name()
+	local meta = itemstack:get_meta()
+	local current = meta:get_int("current")
+	local pos1 = minetest.deserialize(meta:get("pos1"))
+	local pos2 = minetest.deserialize(meta:get("pos2"))
+
+	--debug(current, pos1, pos2)
+	if pointed_thing.type ~= "node" then
+		return itemstack
+	end
+	if current < 2 then
+		if pos1 then
+			delete_pos(pos1)
+		end
+		pos1 = pointed_thing.under
+		if  pos2 and (vector.distance(pos1, pos2) == 0) then
+			meta:set_string("pos1","")
+			meta:set_string("pos2","")
+			meta:set_int("current", 1)
+			delete_pos(pos1)	
+			return itemstack
+		end
+		meta:set_string("pos1", minetest.serialize(pos1))
+		if (not is_valid(pos1, pos2, name)) then
+			meta:set_string("pos2", "")
+		end
+		minetest.add_entity(pos1, "farming_nextgen:pos")
+		meta:set_int("current", 2)
+		return itemstack
+	end
+	if current == 2 then
+		if not pos1 then
+			meta:set_string("pos1","")
+			meta:set_string("pos2","")
+			meta:set_int("current", 1)
+			delete_pos(pos1)
+			delete_pos(pos2)
+			return itemstack
+		end
+		if pos2 then
+			delete_pos(pos2)
+		end
+		pos2 = pointed_thing.under
+		if (vector.distance(pos1, pos2) == 0) then
+			meta:set_string("pos1","")
+			meta:set_string("pos2","")
+			meta:set_int("current", 1)
+			delete_pos(pos1)	
+			return itemstack
+		end
+		meta:set_string("pos2", minetest.serialize(pos2))
+		if (not is_valid(pos1, pos2, name)) then
+			meta:set_string("pos2", "")
+			meta:set_int("current", 2)
+			if (pos1.y ~= pos2.y) and not meta:contains("posReset") then
+				meta:set_int("posReset", 1)
+			elseif (pos1.y ~= pos2.y) and meta:contains("posReset") then
+				meta:set_string("posReset", "")
+				meta:set_string("pos1", "")
+				delete_pos(pos1)
+				meta:set_int("current", 1)
+			end
+			return itemstack
+		end
+		showMarkers(pos1, pos2)
+		meta:set_int("current", 1)
+	end
+	return itemstack
+end
+
 if farmingNG.havetech then
 	if technic.plus then
 		technic.register_power_tool("farming_nextgen:plough", {
 			description = S("plough"),
 			inventory_image = "farming_nextgen_plough.png",
 			max_charge = farmingNG.plough_max_charge,
-			on_use = function(itemstack, user, pointed_thing)
-				local name = user:get_player_name()
+			on_place = onPlace,
+		    on_use = function(itemstack, user, pointed_thing)
+			local name = user:get_player_name()
+			local meta = itemstack:get_meta()
+			local privs = minetest.get_player_privs(name)
+			local charge = technic.get_RE_charge(itemstack)
+   			local pos = pointed_thing.under
+			local areaMin = minetest.deserialize(meta:get("pos1"))
+			local areaMax = minetest.deserialize(meta:get("pos2"))
 
-				if pointed_thing.type ~= "node" then
-					return
-				end
-
-				local charge = technic.get_RE_charge(itemstack)
-				if charge < farmingNG.plough_charge_per_node then
-					return
-				end
-
-				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
-				if minetest.is_protected(pos_above_soil, name) then
-					minetest.record_protection_violation(pos_above_soil, name)
-					return
-				end
-
-				charge = ploughing(pointed_thing.under, charge)
-				if not technic.creative_mode then
-					technic.set_RE_charge(itemstack, charge)
-					return itemstack
-				end
-			end,
+		    if pointed_thing.type ~= "node" then
+			    return itemstack
+		    end
+		    if not charge or  
+				    charge < farmingNG.plough_charge_per_node then
+				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
+			    return
+		    end
+			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
+				minetest.chat_send_player(name, orange("You need to set positions first"))
+				return itemstack
+			end
+			if isNearArea(pos, areaMin, areaMax) then
+				showMarkers(areaMin, areaMax)
+			end
+			if not isInArea(pos, areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("You have to click in your defined area"))
+				return
+			end
+		    if minetest.is_protected(pos, name) then
+				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
+			    minetest.record_protection_violation(pos, name)
+			    return
+		    end
+		   if not isAreaClean(areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
+				return
+		   end
+		    charge = plough(areaMin, areaMax, charge)
+			if not technic.creative_mode then
+				technic.set_RE_charge(itemstack, charge)
+				return itemstack
+			end
+		    return itemstack
+	    end,
 		})
+
 	else
 		    
 	  technic.register_power_tool("farming_nextgen:plough", farmingNG.plough_max_charge)
 
 	  minetest.register_tool("farming_nextgen:plough", {
-		  description = S("plough"),
-		  inventory_image = "farming_nextgen_plough.png",
-		  stack_max = 1,
-		  wear_represents = "technic_RE_charge",
-		  on_refill = technic.refill_RE_charge,
-		  on_use = function(itemstack, user, pointed_thing)
-		    local name = user:get_player_name()
+		description = S("plough"),
+		inventory_image = "farming_nextgen_plough.png",
+		stack_max = 1,
+		wear_represents = "technic_RE_charge",
+		on_refill = technic.refill_RE_charge,
+		on_place = onPlace,
+	    on_use = function(itemstack, user, pointed_thing)
+			local name = user:get_player_name()
+			local meta = itemstack:get_meta()
+	    	local privs = minetest.get_player_privs(name)
+    		local pos = pointed_thing.under
+			--local areaMin = minetest.deserialize(meta:get("pos1"))
+			--local areaMax = minetest.deserialize(meta:get("pos2"))
+			local charge = minetest.deserialize(itemstack:get_metadata())
+	      
+		    if pointed_thing.type ~= "node" then
+			    return itemstack
+		    end
+			minetest.chat_send_all(">>> "..dump(meta:get_string("")))
+		    if not charge or not charge.charge or
+				    charge.charge < farmingNG.plough_charge_per_node then
+				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
+			    return
+		    end
+			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
+				minetest.chat_send_player(name, orange("You need to set positions first"))
+				return itemstack
+			end
+			if isNearArea(pos, areaMin, areaMax) then
+				showMarkers(areaMin, areaMax)
+			end
+			if not isInArea(pos, areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("You have to click in your defined area"))
+				return
+			end
+		    if minetest.is_protected(pos, name) then
+				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
+			    minetest.record_protection_violation(pos, name)
+			    return
+		    end
+		   if not isAreaClean(areaMin, areaMax) then
+				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
+				return
+		   end
+		    charge.charge = plough(areaMin, areaMax, charge.charge)
+			if not technic.creative_mode then
+				technic.set_RE_wear(itemstack, charge.charge, farmingNG.plough_max_charge)
+				itemstack:set_metadata(minetest.serialize(charge))
+			end
+		    return itemstack
 		    
-			
-			  if pointed_thing.type ~= "node" then
-				  return itemstack
-			  end
-
-			  local meta = minetest.deserialize(itemstack:get_metadata())
-			  if not meta or not meta.charge or
-					  meta.charge < farmingNG.plough_charge_per_node then
-				  return
-			  end
-
-			  
-			  local pos_above_soil = vector.add(pointed_thing.under,
-			                                    { x = 0, y = 1, z = 0 })
-			  if minetest.is_protected(pos_above_soil, name) then
-				  minetest.record_protection_violation(pos_above_soil, name)
-				  return
-			  end
-
-			  -- Send current charge to digging function so that the
-			  -- plough will stop after digging a number of nodes
-			  meta.charge = ploug(pointed_thing.under, meta.charge)
-			  if not technic.creative_mode then
-				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.plough_max_charge)
-				  itemstack:set_metadata(minetest.serialize(meta))
-			  end
-			  return itemstack
-		    
-			  
-		  end,
+	    end,
 	  })
-
 	end
 
 	local mesecons_button = minetest.get_modpath("mesecons_button")
@@ -280,7 +387,7 @@ if farmingNG.havetech then
 		output = "farming_nextgen:plough",
 		recipe = {
 			{"technic:battery",            trigger,                  "technic:battery"},
-			{"technic:diamond_drill_head", "technic:machine_casing", "technic:diamond_drill_head"},
+			{"technic:carbon_plate", "technic:machine_casing", "technic:carbon_plate"},
 			{"technic:rubber",             "",                       "technic:rubber"},
 		}
 	})
@@ -294,77 +401,7 @@ else
 	    inventory_image = "farming_nextgen_plough.png",
 	    stack_max = 1,
 	    liquids_pointable = false,
-		on_place = function(itemstack, placer, pointed_thing)
-	    	local name = placer:get_player_name()
-			local meta = itemstack:get_meta()
-			local current = meta:get_int("current")
-			local pos1 = minetest.deserialize(meta:get("pos1"))
-			local pos2 = minetest.deserialize(meta:get("pos2"))
-
-			--debug(current, pos1, pos2)
-			if pointed_thing.type ~= "node" then
-				return itemstack
-			end
-			if current < 2 then
-				if pos1 then
-					delete_pos(pos1)
-				end
-				pos1 = pointed_thing.under
-				if  pos2 and (vector.distance(pos1, pos2) == 0) then
-					meta:set_string("pos1","")
-					meta:set_string("pos2","")
-					meta:set_int("current", 1)
-					delete_pos(pos1)	
-					return itemstack
-				end
-				meta:set_string("pos1", minetest.serialize(pos1))
-				if (not is_valid(pos1, pos2, name)) then
-					meta:set_string("pos2", "")
-				end
-				minetest.add_entity(pos1, "farming_nextgen:pos")
-				meta:set_int("current", 2)
-				return itemstack
-			end
-			if current == 2 then
-				if not pos1 then
-					meta:set_string("pos1","")
-					meta:set_string("pos2","")
-					meta:set_int("current", 1)
-					delete_pos(pos1)
-					delete_pos(pos2)
-					return itemstack
-				end
-				if pos2 then
-					delete_pos(pos2)
-				end
-				pos2 = pointed_thing.under
-				if (vector.distance(pos1, pos2) == 0) then
-					meta:set_string("pos1","")
-					meta:set_string("pos2","")
-					meta:set_int("current", 1)
-					delete_pos(pos1)	
-					return itemstack
-				end
-				meta:set_string("pos2", minetest.serialize(pos2))
-				if (not is_valid(pos1, pos2, name)) then
-					meta:set_string("pos2", "")
-					meta:set_int("current", 2)
-					if (pos1.y ~= pos2.y) and not meta:contains("posReset") then
-						meta:set_int("posReset", 1)
-					elseif (pos1.y ~= pos2.y) and meta:contains("posReset") then
-						meta:set_string("posReset", "")
-						meta:set_string("pos1", "")
-						delete_pos(pos1)
-						meta:set_int("current", 1)
-					end
-					return itemstack
-				end
-				showMarkers(pos1, pos2)
-				meta:set_int("current", 1)
-			end
-			return itemstack
-		end,
-
+		on_place = onPlace,
 	    on_use = function(itemstack, user, pointed_thing)
 			local name = user:get_player_name()
 			local meta = itemstack:get_meta()
