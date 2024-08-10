@@ -6,7 +6,6 @@ end
 
 local perNode = 65535 / (farmingNG.plough_max_charge / farmingNG.plough_charge_per_node)
 
-
 minetest.register_entity("farming_nextgen:pos", 
 {
 		visual = "cube",
@@ -67,15 +66,19 @@ local function plough(min, max, charge)
 			--minetest.add_entity(tmp, "farming_nextgen:pos")
 			minetest.set_node(tmp, {name = "farming:soil_wet"})
 			if farmingNG.plough_set_water_nodes then
-				if (math.fmod(max.z - z, 5) == 0) and
-					not minetest.find_node_near(tmp, 4,
+				if (math.fmod(max.z - z, 4) == 0) and
+					not minetest.find_node_near(tmp, 3,
 					{name = 'default:water_source'}) then
 						minetest.set_node(water, {name = "default:water_source"})
 						minetest.set_node(sec, {name = "default:stone"})
 				end
 			end
 			z = z + 1
-			charge = charge - perNode
+			if farmingNG.havetech then
+				charge = charge - farmingNG.plough_charge_per_node
+			else
+				charge = charge - perNode
+			end
 		end
 		x = x + 1
 	end
@@ -267,6 +270,64 @@ local onPlace =  function(itemstack, placer, pointed_thing)
 	return itemstack
 end
 
+local onUse = function(itemstack, user, pointed_thing)
+	local name = user:get_player_name()
+	local meta = itemstack:get_meta()
+   	local privs = minetest.get_player_privs(name)
+	local charge = 0
+	local pos = pointed_thing.under
+	local areaMin = minetest.deserialize(meta:get("pos1"))
+	local areaMax = minetest.deserialize(meta:get("pos2"))
+     
+	if farmingNG.havetech then
+		charge =  meta:get_int("technic:charge")
+	else
+		charge = 65535 - itemstack:get_wear()
+	end
+
+    if pointed_thing.type ~= "node" then
+	    return itemstack
+    end
+	--minetest.chat_send_all("Charge = "..dump(charge))
+    if not charge or  
+		    charge < farmingNG.plough_charge_per_node then
+		    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
+	    return
+    end
+	if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
+		minetest.chat_send_player(name, orange("You need to set positions first"))
+		return itemstack
+	end
+	if isNearArea(pos, areaMin, areaMax) then
+		showMarkers(areaMin, areaMax)
+	end
+	if not isInArea(pos, areaMin, areaMax) then
+		minetest.chat_send_player(name, orange("You have to click in your defined area"))
+		return
+	end
+    if minetest.is_protected(pos, name) then
+		minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
+	    minetest.record_protection_violation(pos, name)
+	    return
+    end
+   if not isAreaClean(areaMin, areaMax) then
+		minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
+		return
+   end
+    charge = plough(areaMin, areaMax, charge)
+	--minetest.chat_send_all("Charge = "..dump(charge).."\nPer Node ="..perNode.."\n----------\n")
+	if farmingNG.havetech then
+		if not technic.creative_mode then
+			meta:set_int("technic:charge", charge)
+			technic.set_RE_wear(itemstack, charge, farmingNG.plough_max_charge)
+		end
+		return itemstack
+	end
+    itemstack:set_wear(65535 - charge)
+    return itemstack
+    
+end
+
 if farmingNG.havetech then
 	if technic.plus then
 		technic.register_power_tool("farming_nextgen:plough", {
@@ -320,7 +381,7 @@ if farmingNG.havetech then
 	    end,
 		})
 
-	else
+	else -- registration of technic tool and recipe
 		    
 	  technic.register_power_tool("farming_nextgen:plough", farmingNG.plough_max_charge)
 
@@ -331,52 +392,7 @@ if farmingNG.havetech then
 		wear_represents = "technic_RE_charge",
 		on_refill = technic.refill_RE_charge,
 		on_place = onPlace,
-	    on_use = function(itemstack, user, pointed_thing)
-			local name = user:get_player_name()
-			local meta = itemstack:get_meta()
-	    	local privs = minetest.get_player_privs(name)
-    		local pos = pointed_thing.under
-			--local areaMin = minetest.deserialize(meta:get("pos1"))
-			--local areaMax = minetest.deserialize(meta:get("pos2"))
-			local charge = minetest.deserialize(itemstack:get_metadata())
-	      
-		    if pointed_thing.type ~= "node" then
-			    return itemstack
-		    end
-			minetest.chat_send_all(">>> "..dump(meta:get_string("")))
-		    if not charge or not charge.charge or
-				    charge.charge < farmingNG.plough_charge_per_node then
-				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
-			    return
-		    end
-			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
-				minetest.chat_send_player(name, orange("You need to set positions first"))
-				return itemstack
-			end
-			if isNearArea(pos, areaMin, areaMax) then
-				showMarkers(areaMin, areaMax)
-			end
-			if not isInArea(pos, areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("You have to click in your defined area"))
-				return
-			end
-		    if minetest.is_protected(pos, name) then
-				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
-			    minetest.record_protection_violation(pos, name)
-			    return
-		    end
-		   if not isAreaClean(areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
-				return
-		   end
-		    charge.charge = plough(areaMin, areaMax, charge.charge)
-			if not technic.creative_mode then
-				technic.set_RE_wear(itemstack, charge.charge, farmingNG.plough_max_charge)
-				itemstack:set_metadata(minetest.serialize(charge))
-			end
-		    return itemstack
-		    
-	    end,
+	    on_use = onUse,
 	  })
 	end
 
@@ -393,7 +409,7 @@ if farmingNG.havetech then
 	})
 
 
-else
+else -- registration of basic non technic tool and recipe
 		    
     minetest.register_tool("farming_nextgen:plough", {
 	    description = S("plough"),
@@ -402,48 +418,7 @@ else
 	    stack_max = 1,
 	    liquids_pointable = false,
 		on_place = onPlace,
-	    on_use = function(itemstack, user, pointed_thing)
-			local name = user:get_player_name()
-			local meta = itemstack:get_meta()
-	    	local privs = minetest.get_player_privs(name)
-			local charge = 65535 - itemstack:get_wear()
-    		local pos = pointed_thing.under
-			local areaMin = minetest.deserialize(meta:get("pos1"))
-			local areaMax = minetest.deserialize(meta:get("pos2"))
-	      
-		    if pointed_thing.type ~= "node" then
-			    return itemstack
-		    end
-		    if not charge or  
-				    charge < farmingNG.plough_charge_per_node then
-				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
-			    return
-		    end
-			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
-				minetest.chat_send_player(name, orange("You need to set positions first"))
-				return itemstack
-			end
-			if isNearArea(pos, areaMin, areaMax) then
-				showMarkers(areaMin, areaMax)
-			end
-			if not isInArea(pos, areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("You have to click in your defined area"))
-				return
-			end
-		    if minetest.is_protected(pos, name) then
-				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
-			    minetest.record_protection_violation(pos, name)
-			    return
-		    end
-		   if not isAreaClean(areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
-				return
-		   end
-		    charge = plough(areaMin, areaMax, charge)
-		    itemstack:set_wear(65535-charge)
-		    return itemstack
-		    
-	    end,
+	    on_use = onUse,
     })
 
     minetest.register_craft({
