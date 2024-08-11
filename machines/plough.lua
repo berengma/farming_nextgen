@@ -66,7 +66,8 @@ local function plough(min, max, charge)
 			--minetest.add_entity(tmp, "farming_nextgen:pos")
 			minetest.set_node(tmp, {name = "farming:soil_wet"})
 			if farmingNG.plough_set_water_nodes then
-				if (math.fmod(max.z - z, 4) == 0) and
+				if ((math.fmod(max.z - z, 4) == 0) or
+					(math.fmod(max.x - x, 4) == 0)) and
 					not minetest.find_node_near(tmp, 3,
 					{name = 'default:water_source'}) then
 						minetest.set_node(water, {name = "default:water_source"})
@@ -211,7 +212,7 @@ local onPlace =  function(itemstack, placer, pointed_thing)
 	if pointed_thing.type ~= "node" then
 		return itemstack
 	end
-	-- on_place from this tool and on_rightclick from node do go together
+	-- on_place from this tool and on_rightclick from node do not go together
 	-- well. To enable the anvil repair, we get it's registration and call
 	-- it's method on_rightclick right away!
 	node = minetest.get_node(pointed_thing.under)
