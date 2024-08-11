@@ -1,9 +1,7 @@
 --
 -- The settings section for seeder
 --
---
--- 		
--- Is technic mod present ? If not use wearout tool instead
+-- t mergeIs technic mod present ? If not use wearout tool instead
 --
 farmingNG.havetech = minetest.get_modpath("technic")
 

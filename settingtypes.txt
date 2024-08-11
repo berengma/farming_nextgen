@@ -13,7 +13,7 @@ farmingNG_chaton (more verbose chat messages) bool false
 #less expensive recipe if technic mod is present
 farmingNG_easy (easy recipe if technic mod is present) bool false
 
-#maximum charge of the harvster, lower values mean faster load if technic present
+#maximum charge of the harvester, lower values mean faster load if technic present
 farmingNG_harvester_max_charge (Maximum charge of the harvester) int 650000 
 
 #costs to place a seed: maxcharge devided by charge_per_node = number of
