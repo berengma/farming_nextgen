@@ -22,7 +22,7 @@ all weed will be removed before, if any.
 ---
 <ul>
     <li>Right click to set the area marks</li>
-    <li>Left click **in** the defined area to plough it</li>
+    <li>Left click IN the defined area to plough it</li>
     <li>The area must be on level and clean (all nodes have only air above and are from dirt group</li>)
     <li>The plough can be charged if technic mod is present</li>
     <li>The plough can be repaired if the anvil mod is present</li>
