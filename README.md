@@ -17,8 +17,9 @@ and leftclick on a piece of soil.
 All soil will be seeded with your choosen seed while
 all weed will be removed before, if any.
 
-##**NEW**<br>
-##The Plough!
+# NEW<br>
+## The Plough!
+---
 <ul>
     <li>Right click to set the area marks</li>
     <li>Left click **in** the defined area to plough it</li>
@@ -28,8 +29,8 @@ all weed will be removed before, if any.
     <li>Water nodes to keep the soil wet, are set automatically (configureable)</li>
 </ul>
 
-30/11/2018 added support of compost:garden_soil if compost mod is present
-11/08/2024 added the plough, to make wet_soil from dirt group in a self defined area
+30/11/2018 added support of compost:garden_soil if compost mod is present<br>
+11/08/2024 added the plough, to make wet_soil from dirt group in a self defined area<br>
 
 
 
