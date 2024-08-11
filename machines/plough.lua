@@ -321,10 +321,12 @@ local onUse = function(itemstack, user, pointed_thing)
 	    minetest.record_protection_violation(pos, name)
 	    return
     end
-   if not isAreaClean(areaMin, areaMax) then
+ 	if not isAreaClean(areaMin, areaMax) then
 		minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
 		return
-   end
+	end
+	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain,
+			max_hear_distance = 10})
     charge = plough(areaMin, areaMax, charge)
 	--minetest.chat_send_all("Charge = "..dump(charge).."\nPer Node ="..perNode.."\n----------\n")
 	if farmingNG.havetech then
