@@ -202,12 +202,22 @@ end
 local onPlace =  function(itemstack, placer, pointed_thing)
    	local name = placer:get_player_name()
 	local meta = itemstack:get_meta()
+	local node = nil
 	local current = meta:get_int("current")
 	local pos1 = minetest.deserialize(meta:get("pos1"))
 	local pos2 = minetest.deserialize(meta:get("pos2"))
 
 	--debug(current, pos1, pos2)
 	if pointed_thing.type ~= "node" then
+		return itemstack
+	end
+	-- on_place from this tool and on_rightclick from node do go together
+	-- well. To enable the anvil repair, we get it's registration and call
+	-- it's method on_rightclick right away!
+	node = minetest.get_node(pointed_thing.under)
+	if not farmingNG.havetech and node.name == "anvil:anvil" then
+		local nodedef = minetest.registered_nodes[node.name]
+		nodedef.on_rightclick(pointed_thing.under, node, placer, itemstack, pointed_thing)
 		return itemstack
 	end
 	if current < 2 then
@@ -329,63 +339,10 @@ local onUse = function(itemstack, user, pointed_thing)
 end
 
 if farmingNG.havetech then
-	if technic.plus then
-		technic.register_power_tool("farming_nextgen:plough", {
-			description = S("plough"),
-			inventory_image = "farming_nextgen_plough.png",
-			max_charge = farmingNG.plough_max_charge,
-			on_place = onPlace,
-		    on_use = function(itemstack, user, pointed_thing)
-			local name = user:get_player_name()
-			local meta = itemstack:get_meta()
-			local privs = minetest.get_player_privs(name)
-			local charge = technic.get_RE_charge(itemstack)
-   			local pos = pointed_thing.under
-			local areaMin = minetest.deserialize(meta:get("pos1"))
-			local areaMax = minetest.deserialize(meta:get("pos2"))
+	-- registration of technic tool and recipe
+	technic.register_power_tool("farming_nextgen:plough", farmingNG.plough_max_charge)
 
-		    if pointed_thing.type ~= "node" then
-			    return itemstack
-		    end
-		    if not charge or  
-				    charge < farmingNG.plough_charge_per_node then
-				    minetest.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
-			    return
-		    end
-			if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
-				minetest.chat_send_player(name, orange("You need to set positions first"))
-				return itemstack
-			end
-			if isNearArea(pos, areaMin, areaMax) then
-				showMarkers(areaMin, areaMax)
-			end
-			if not isInArea(pos, areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("You have to click in your defined area"))
-				return
-			end
-		    if minetest.is_protected(pos, name) then
-				minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
-			    minetest.record_protection_violation(pos, name)
-			    return
-		    end
-		   if not isAreaClean(areaMin, areaMax) then
-				minetest.chat_send_player(name, orange("Please clean up your area before ploughing it."))
-				return
-		   end
-		    charge = plough(areaMin, areaMax, charge)
-			if not technic.creative_mode then
-				technic.set_RE_charge(itemstack, charge)
-				return itemstack
-			end
-		    return itemstack
-	    end,
-		})
-
-	else -- registration of technic tool and recipe
-		    
-	  technic.register_power_tool("farming_nextgen:plough", farmingNG.plough_max_charge)
-
-	  minetest.register_tool("farming_nextgen:plough", {
+	minetest.register_tool("farming_nextgen:plough", {
 		description = S("plough"),
 		inventory_image = "farming_nextgen_plough.png",
 		stack_max = 1,
@@ -394,7 +351,6 @@ if farmingNG.havetech then
 		on_place = onPlace,
 	    on_use = onUse,
 	  })
-	end
 
 	local mesecons_button = minetest.get_modpath("mesecons_button")
 	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
@@ -408,7 +364,6 @@ if farmingNG.havetech then
 		}
 	})
 
-
 else -- registration of basic non technic tool and recipe
 		    
     minetest.register_tool("farming_nextgen:plough", {
@@ -417,6 +372,8 @@ else -- registration of basic non technic tool and recipe
 	    inventory_image = "farming_nextgen_plough.png",
 	    stack_max = 1,
 	    liquids_pointable = false,
+		node_placement_prediction = nil,
+		node_dig_prediction = "",
 		on_place = onPlace,
 	    on_use = onUse,
     })
