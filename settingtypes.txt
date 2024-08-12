@@ -20,6 +20,21 @@ farmingNG_harvester_max_charge (Maximum charge of the harvester) int 650000
 #nodes which can be harvested (default 650000 / 1300 = 500 nodes)
 farmingNG_harvester_charge_per_node (Costs of harvesting one node) int 1300
 
+#Enables or disables the machine
+farmingNG_enable_plough_machine (enable the plough) bool true
+
+#maximum charge of the plough, lower values charge faster with technic mod
+farmingNG_plough_max_charge (Maximum charge of the plough) int 600000
+
+#costs to plough one node of the dirt group
+farmingNG_plough_charge_per_node (Costs of ploughing one node) int 2000
+
+#Enabling that water nodes are placed automatically to keep your soil wet
+farmingNG_plough_auto_set_water_node (auto place underground water nodes) bool true
+
+#Time in seconds the area markers for your plough area are shown
+farmingNG_show_plough_pos_time (time in seconds to show area markers) int 15
+
 #plants like wheat, rice, oat etc do not grow equally but already give drops
 #if only 90% grown, set to false if you only want to harvest 100% grown nodes
 farmingNG_harvester_nofullg (harvest not already fully grown) bool true
