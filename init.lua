@@ -24,10 +24,8 @@ function farmingNG.register_seed(seed, plant)
        table.insert(farmingNG.seeder_seed, new_seed)
        return true
     end
-    
     return false
-      
-end -- register_seed
+end
 
 -- register_util(Seedling, Util)
 -- Seedling = fully name of the seedling like "farming_nextgen:grape_seedling"
@@ -59,13 +57,11 @@ if  farmingNG.harvester_machine then
         end
         return false
     end
-
 else
     function farmingNG.register_harvestername(plantname)
         return false
     end
 end
-
 if farmingNG.plough_machine then
       dofile(path.."/machines/plough.lua")
 end

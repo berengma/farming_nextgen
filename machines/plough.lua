@@ -205,8 +205,8 @@ local onPlace =  function(itemstack, placer, pointed_thing)
 	local meta = itemstack:get_meta()
 	local node = nil
 	local current = meta:get_int("current")
-	local pos1 = minetest.deserialize(meta:get("pos1"))
-	local pos2 = minetest.deserialize(meta:get("pos2"))
+	local pos1 = minetest.deserialize(meta:get("pos1") or "")
+	local pos2 = minetest.deserialize(meta:get("pos2") or "")
 
 	--debug(current, pos1, pos2)
 	if pointed_thing.type ~= "node" then
