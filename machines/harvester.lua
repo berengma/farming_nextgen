@@ -244,25 +244,20 @@ if farmingNG.havetech then
 			on_use = function(itemstack, user, pointed_thing)
 				local name = user:get_player_name()
 				
-				
 				if pointed_thing.type ~= "node" then
 					return itemstack
 				end
- 
 				local meta = core.deserialize(itemstack:get_metadata())
 				if not meta or not meta.charge or
 					meta.charge < farmingNG.harvester_charge_per_node then
 					return
 				end
- 
-				  
 				local pos_above_soil = vector.add(pointed_thing.under,
-													{ x = 0, y = 1, z = 0 })
+												{ x = 0, y = 1, z = 0 })
 				if core.is_protected(pos_above_soil, name) then
 					core.record_protection_violation(pos_above_soil, name)
 					return
 				end
- 
 				  -- Send current charge to digging function so that the
 				  -- harvester will stop after digging a number of nodes
 				meta.charge = harvester_dig(pointed_thing.under, meta.charge)
