@@ -189,7 +189,7 @@ local function isFreeFromProtections(pos1, pos2, name)
 	if core.is_area_protected(checkAreaUp, checkAreaDown, name or "", 1) then
 		if name then
 			core.chat_send_player(name, orange("There are already other players protections in this area"))
-	    	core.record_protection_violation(checkAreaDown, name)
+			core.record_protection_violation(checkAreaDown, name)
 		end
 		return false
 	end
@@ -312,22 +312,22 @@ local onUse = function(itemstack, user, pointed_thing)
 	local pos = pointed_thing.under
 	local areaMin = core.deserialize(meta:get("pos1"))
 	local areaMax = core.deserialize(meta:get("pos2"))
-     
+	 
 	if farmingNG.havetech then
 		charge =  meta:get_int("technic:charge")
 	else
 		charge = 65535 - itemstack:get_wear()
 	end
 
-    if pointed_thing.type ~= "node" then
-	    return itemstack
-    end
+	if pointed_thing.type ~= "node" then
+		return itemstack
+	end
 	--core.chat_send_all("Charge = "..dump(charge))
-    if not charge or  
-		    charge < farmingNG.plough_charge_per_node then
-		    core.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
-	    return
-    end
+	if not charge or  
+			charge < farmingNG.plough_charge_per_node then
+			core.chat_send_player(name, orange(S(" *** Your device needs to be serviced")))
+		return
+	end
 	if not meta or not (meta:contains("pos1") and meta:contains("pos2")) then
 		core.chat_send_player(name, orange("You need to set positions first"))
 		return itemstack
@@ -339,16 +339,16 @@ local onUse = function(itemstack, user, pointed_thing)
 		core.chat_send_player(name, orange("You have to click in your defined area"))
 		return
 	end
-    if not isFreeFromProtections(areaMin, areaMax, name) then
-	    return
-    end
+	if not isFreeFromProtections(areaMin, areaMax, name) then
+		return
+	end
  	if not isAreaClean(areaMin, areaMax) then
 		core.chat_send_player(name, orange("Please clean up your area before ploughing it."))
 		return
 	end
 	core.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain,
 			max_hear_distance = 10})
-    charge = plough(areaMin, areaMax, charge)
+	charge = plough(areaMin, areaMax, charge)
 	--core.chat_send_all("Charge = "..dump(charge).."\nPer Node ="..perNode.."\n----------\n")
 	if farmingNG.havetech then
 		if not technic.creative_mode then
@@ -357,9 +357,9 @@ local onUse = function(itemstack, user, pointed_thing)
 		end
 		return itemstack
 	end
-    itemstack:set_wear(65535 - charge)
-    return itemstack
-    
+	itemstack:set_wear(65535 - charge)
+	return itemstack
+	
 end
 
 if farmingNG.havetech then
@@ -373,8 +373,8 @@ if farmingNG.havetech then
 		wear_represents = "technic_RE_charge",
 		on_refill = technic.refill_RE_charge,
 		on_place = onPlace,
-	    on_use = onUse,
-	  })
+		on_use = onUse,
+	})
 
 	local mesecons_button = core.get_modpath("mesecons_button")
 	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
@@ -389,26 +389,26 @@ if farmingNG.havetech then
 	})
 
 else -- registration of basic non technic tool and recipe
-		    
-    core.register_tool("farming_nextgen:plough", {
-	    description = S("plough"),
-	    groups = {soil = 2, crumbly = 1},
-	    inventory_image = "farming_nextgen_plough.png",
-	    stack_max = 1,
-	    liquids_pointable = false,
+			
+	core.register_tool("farming_nextgen:plough", {
+		description = S("plough"),
+		groups = {soil = 2, crumbly = 1},
+		inventory_image = "farming_nextgen_plough.png",
+		stack_max = 1,
+		liquids_pointable = false,
 		node_placement_prediction = nil,
 		node_dig_prediction = "",
 		on_place = onPlace,
-	    on_use = onUse,
-    })
+		on_use = onUse,
+	})
 
-    core.register_craft({
-	    output = "farming_nextgen:plough",
-	    recipe = {
-		    {"default:diamondblock",			"default:mese_crystal_fragment",	"default:diamondblock"},
-		    {"default:steel_ingot",				"default:tin_ingot",				"default:steel_ingot"},
-		    {"default:mese_crystal_fragment",	"",									"default:mese_crystal_fragment"},
-	    }
-    })
+	core.register_craft({
+		output = "farming_nextgen:plough",
+		recipe = {
+			{"default:diamondblock",			"default:mese_crystal_fragment",	"default:diamondblock"},
+			{"default:steel_ingot",				"default:tin_ingot",				"default:steel_ingot"},
+			{"default:mese_crystal_fragment",	"",									"default:mese_crystal_fragment"},
+		}
+	})
    
 end
