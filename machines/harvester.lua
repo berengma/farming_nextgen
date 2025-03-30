@@ -2,7 +2,7 @@
 
 local S = farmingNG.S
 
-    -- farming
+	-- farming
 	farmingNG.harvester_names["farming:artichoke_5"] = true
 	farmingNG.harvester_names["farming:wheat_8"] = true
 	farmingNG.harvester_names["farming:wheat_7"] = farmingNG.harvester_nofullg
@@ -70,11 +70,11 @@ local S = farmingNG.S
 	farmingNG.harvester_names["ethereal:strawberry_7"] = farmingNG.harvester_nofullg
 	farmingNG.harvester_names["ethereal:strawberry_8"] = true
 	
-    -- beer_test
-    farmingNG.harvester_names["beer_test:oats_8"]	= true
+	-- beer_test
+	farmingNG.harvester_names["beer_test:oats_8"]	= true
 
-    -- farming_plus
-    farmingNG.harvester_names["farming_plus:melon"]	= true
+	-- farming_plus
+	farmingNG.harvester_names["farming_plus:melon"]	= true
 	farmingNG.harvester_names["farming_plus:tomato"] = true
 	farmingNG.harvester_names["farming_plus:chilli"] = true
 	farmingNG.harvester_names["farming_plus:garlic"] = true
@@ -92,10 +92,11 @@ local S = farmingNG.S
 	farmingNG.harvester_names["farming_plus:corn"]	= true
 	farmingNG.harvester_names["farming_plus:cornb"]	= true
 	farmingNG.harvester_names["farming_plus:cornc"]	= true
-    
+	
 if not farmingNG.havetech then
-      farmingNG.harvester_charge_per_node = math.floor(65535 / farmingNG.harvester_max_charge * farmingNG.harvester_charge_per_node)
-      farmingNG.harvester_max_charge = 65535
+	farmingNG.harvester_charge_per_node =
+		math.floor(65535 / farmingNG.harvester_max_charge* farmingNG.harvester_charge_per_node)
+	farmingNG.harvester_max_charge = 65535
 end
 
 -- Table for saving what was sawed down
@@ -127,13 +128,12 @@ local function recursive_harvest(pos, remaining_charge)
 	if not farmingNG.harvester_names[node.name] then
 		return remaining_charge
 	end
-
-	
 	handle_drops(minetest.get_node_drops(node.name, ""))
 	minetest.remove_node(pos)
 	remaining_charge = remaining_charge - farmingNG.harvester_charge_per_node
-	if remaining_charge < 1 then remaining_charge = 1 end
-
+	if remaining_charge < 1 then
+		remaining_charge = 1
+	end
 	-- Check surroundings and run recursively if any charge left
 	for npos in farmingNG.iterSawTries(pos) do
 		if remaining_charge < farmingNG.harvester_charge_per_node then
@@ -175,7 +175,6 @@ local function get_drop_pos(pos)
 			end
 		end
 	end
-
 	-- Return the original position if this takes too long
 	return pos
 end
@@ -199,13 +198,10 @@ local function harvester_dig(pos, current_charge)
 		stack:set_count(count)
 		minetest.add_item(get_drop_pos(pos), stack)
 	end
-
 	-- Clean up
 	produced = {}
-
 	return remaining_charge
 end
-
 
 if farmingNG.havetech then
 	if technic.plus then
@@ -219,18 +215,15 @@ if farmingNG.havetech then
 				if pointed_thing.type ~= "node" then
 					return
 				end
-
 				local charge = technic.get_RE_charge(itemstack)
 				if charge < farmingNG.harvester_charge_per_node then
 					return
 				end
-
 				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
 				if minetest.is_protected(pos_above_soil, name) then
 					minetest.record_protection_violation(pos_above_soil, name)
 					return
 				end
-
 				-- Send current charge to digging function so that the
 				-- harvester will stop after digging a number of nodes
 				charge = harvester_dig(pointed_thing.under, charge)
@@ -241,119 +234,96 @@ if farmingNG.havetech then
 			end,
 		})
 	else
-		    
-	  technic.register_power_tool("farming_nextgen:harvester", farmingNG.harvester_max_charge)
-
-
-
-	  minetest.register_tool("farming_nextgen:harvester", {
-		  description = S("Harvester"),
-		  inventory_image = "farming_nextgen_harvester.png",
-		  stack_max = 1,
-		  wear_represents = "technic_RE_charge",
-		  on_refill = technic.refill_RE_charge,
-		  on_use = function(itemstack, user, pointed_thing)
-		    local name = user:get_player_name()
-		    
-			
-			  if pointed_thing.type ~= "node" then
-				  return itemstack
-			  end
-
-			  local meta = minetest.deserialize(itemstack:get_metadata())
-			  if not meta or not meta.charge or
-					  meta.charge < farmingNG.harvester_charge_per_node then
-				  return
-			  end
-
-			  
-			  local pos_above_soil = vector.add(pointed_thing.under,
-			                                    { x = 0, y = 1, z = 0 })
-			  if minetest.is_protected(pos_above_soil, name) then
-				  minetest.record_protection_violation(pos_above_soil, name)
-				  return
-			  end
-
-			  -- Send current charge to digging function so that the
-			  -- harvester will stop after digging a number of nodes
-			  meta.charge = harvester_dig(pointed_thing.under, meta.charge)
-			  if not technic.creative_mode then
-				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.harvester_max_charge)
-				  itemstack:set_metadata(minetest.serialize(meta))
-			  end
-			  return itemstack
-		    
-			  
-		  end,
-	  })
-
+		technic.register_power_tool("farming_nextgen:harvester", farmingNG.harvester_max_charge)
+		minetest.register_tool("farming_nextgen:harvester", {
+			description = S("Harvester"),
+			inventory_image = "farming_nextgen_harvester.png",
+			stack_max = 1,
+			wear_represents = "technic_RE_charge",
+			on_refill = technic.refill_RE_charge,
+			on_use = function(itemstack, user, pointed_thing)
+				local name = user:get_player_name()
+				
+				
+				if pointed_thing.type ~= "node" then
+					return itemstack
+				end
+ 
+				local meta = minetest.deserialize(itemstack:get_metadata())
+				if not meta or not meta.charge or
+					meta.charge < farmingNG.harvester_charge_per_node then
+					return
+				end
+ 
+				  
+				local pos_above_soil = vector.add(pointed_thing.under,
+													{ x = 0, y = 1, z = 0 })
+				if minetest.is_protected(pos_above_soil, name) then
+					minetest.record_protection_violation(pos_above_soil, name)
+					return
+				end
+ 
+				  -- Send current charge to digging function so that the
+				  -- harvester will stop after digging a number of nodes
+				meta.charge = harvester_dig(pointed_thing.under, meta.charge)
+				if not technic.creative_mode then
+					technic.set_RE_wear(itemstack, meta.charge, farmingNG.harvester_max_charge)
+					itemstack:set_metadata(minetest.serialize(meta))
+				end
+				return itemstack
+			end,
+		})
 	end
-
 	local mesecons_button = minetest.get_modpath("mesecons_button")
 	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
+	minetest.register_craft({
+		output = "farming_nextgen:harvester",
+		recipe = {
+			{"technic:battery",				trigger,					"technic:battery"},
+			{"technic:diamond_drill_head",	"technic:machine_casing",	"technic:diamond_drill_head"},
+			{"technic:rubber",				"",							"technic:rubber"},
+		}
+	})
+else
+	minetest.register_tool("farming_nextgen:harvester", {
+		description = S("Harvester"),
+		groups = {soil=2},
+		inventory_image = "farming_nextgen_harvester.png",
+		stack_max=1,
+		liquids_pointable = false,
+		on_use = function(itemstack, user, pointed_thing)
+			local seednum=0
+			local name = user:get_player_name()
+			local privs = minetest.get_player_privs(name)
+		  
+			
+			if pointed_thing.type ~= "node" then
+				return itemstack
+			end
+			local charge = 65535 - itemstack:get_wear()
+			if not charge or  
+					charge < farmingNG.harvester_charge_per_node then
+					minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
+				return
+			end
+			local pos_above_soil = vector.add(pointed_thing.under,
+											{ x = 0, y = 1, z = 0 })
+			if minetest.is_protected(pos_above_soil, name) then
+				minetest.record_protection_violation(pos_above_soil, name)
+				return
+			end
+			charge = harvester_dig(pointed_thing.under, charge)
+			itemstack:set_wear(65535-charge)
+			return itemstack
+		end,
+	})
 
 	minetest.register_craft({
 		output = "farming_nextgen:harvester",
 		recipe = {
-			{"technic:battery",            trigger,                  "technic:battery"},
-			{"technic:diamond_drill_head", "technic:machine_casing", "technic:diamond_drill_head"},
-			{"technic:rubber",             "",                       "technic:rubber"},
+			{"default:diamondblock",			"default:mese_crystal_fragment",	"default:diamondblock"},
+			{"default:gold_ingot",				"default:bronze_ingot",				"default:gold_ingot"},
+			{"default:mese_crystal_fragment",	"",									"default:mese_crystal_fragment"},
 		}
 	})
-
-
-else
-
-		    
-		    minetest.register_tool("farming_nextgen:harvester", {
-			    description = S("Harvester"),
-			    groups = {soil=2},
-			    inventory_image = "farming_nextgen_harvester.png",
-			    stack_max=1,
-			    liquids_pointable = false,
-			    on_use = function(itemstack, user, pointed_thing)
-			      local seednum=0
-			      local name = user:get_player_name()
-			      local privs = minetest.get_player_privs(name)
-			      
-				    
-				    if pointed_thing.type ~= "node" then
-					    return itemstack
-				    end
-
-				    local charge = 65535 - itemstack:get_wear()
-				    
-				    if not charge or  
-						    charge < farmingNG.harvester_charge_per_node then
-						    minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
-					    return
-				    end
-
-        		    local pos_above_soil = vector.add(pointed_thing.under,
-			                                        { x = 0, y = 1, z = 0 })
-				    if minetest.is_protected(pos_above_soil, name) then
-					    minetest.record_protection_violation(pos_above_soil, name)
-					    return
-				    end
-				    
-				    charge = harvester_dig(pointed_thing.under, charge)
-				    itemstack:set_wear(65535-charge)
-				    return itemstack
-				    
-			    end,
-		    })
-
-		    
-
-		    minetest.register_craft({
-			    output = "farming_nextgen:harvester",
-			    recipe = {
-				    {"default:diamondblock",                                    "default:mese_crystal_fragment",                      "default:diamondblock"              },
-				    {"default:gold_ingot",      "default:bronze_ingot",              "default:gold_ingot"},
-				    {"default:mese_crystal_fragment",                              "",                                 "default:mese_crystal_fragment"},
-			    }
-		    })
-	  
-
-	    
 end
