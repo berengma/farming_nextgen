@@ -52,6 +52,7 @@ end
 local function plough(min, max, charge)
 	local x = 0
 	local z = 0
+	local node = nil
 
 	if (not min or not max) then
 		return charge
@@ -66,7 +67,15 @@ local function plough(min, max, charge)
 			local sec = vector.new(x, min.y - 2, z)
 
 			--minetest.add_entity(tmp, "farming_nextgen:pos")
-			minetest.set_node(tmp, {name = "farming:soil_wet"})
+			node = core.get_node(tmp)
+			if node.name == "ignore" then
+				return
+			end
+			if string.find(node.name, ":dry_") then
+				core.set_node(tmp, {name = "farming:dry_soil_wet"})
+			else
+				core.set_node(tmp, {name = "farming:soil_wet"})
+			end
 			if farmingNG.plough_set_water_nodes then
 				if ((math.fmod(max.z - z, 4) == 0) or
 					(math.fmod(max.x - x, 4) == 0)) and
