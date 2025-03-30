@@ -1,9 +1,9 @@
 -- *** Farming_NextGen mod ***
 
 farmingNG = {}
-local path = minetest.get_modpath(minetest.get_current_modname())
-if(minetest.get_translator ~= nil) then
-	farmingNG.S = minetest.get_translator(minetest.get_current_modname())
+local path = core.get_modpath(core.get_current_modname())
+if(core.get_translator ~= nil) then
+	farmingNG.S = core.get_translator(core.get_current_modname())
 else
 	farmingNG.S = function ( s ) return s end
 end
@@ -66,8 +66,8 @@ end
 -- The following is only on Jungle Server valid
 if farmingNG.havetech then   
 	-- compatibility alias
-	minetest.register_alias("technic:seeder", "farming_nextgen:seeder")
+	core.register_alias("technic:seeder", "farming_nextgen:seeder")
 end
 
-print("[MOD] FarmingNG alias ".. minetest.get_current_modname() .. 
+print("[MOD] FarmingNG alias ".. core.get_current_modname() .. 
 	" V".. farmingNG.version .." loaded.")
