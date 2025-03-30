@@ -8,8 +8,9 @@ local perNode = 65535 / (farmingNG.plough_max_charge / farmingNG.plough_charge_p
 
 minetest.register_entity("farming_nextgen:pos", 
 {
+	initial_properties = {
 		visual = "cube",
-        collide_with_objects = false,                  
+		collide_with_objects = false,                  
 		visual_size = {x=1.1, y=1.1},
 		textures = {"farming_nextgen_pos.png", "farming_nextgen_pos.png",
 			"farming_nextgen_pos.png", "farming_nextgen_pos.png",
@@ -17,14 +18,15 @@ minetest.register_entity("farming_nextgen:pos",
 		collisionbox = {-0.55, -0.55, -0.55, 0.55, 0.55, 0.55},
 		physical = false,
 		pointable = false,
-		lifetime = farmingNG.show_plough_pos,
-		on_step = function(self, dtime)
-			if self.lifetime > 0 then
-				self.lifetime = self.lifetime - dtime
-				return
-			end
-			self.object:remove()
-		end,
+	},
+	lifetime = farmingNG.show_plough_pos,
+	on_step = function(self, dtime)
+		if self.lifetime > 0 then
+			self.lifetime = self.lifetime - dtime
+			return
+		end
+		self.object:remove()
+	end
 })
 
 local function getDecorations()

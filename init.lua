@@ -13,7 +13,7 @@ farmingNG.seeder_seed = {}
 farmingNG.seeder_utils = {}
 farmingNG.harvester_names = {}
 farmingNG.plough_pos = {pos1 = {}, pos2 = {}}
-farmingNG.version = "1.4.1"
+farmingNG.version = "1.4.2"
 
 
 -- register_seed(Seed ,Plantname)
