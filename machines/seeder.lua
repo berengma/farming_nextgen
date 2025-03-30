@@ -15,42 +15,42 @@ if not farmingNG.havetech then
 end
 
 --check for farming redo mod
-if minetest.global_exists("farming") then
+if core.global_exists("farming") then
 	if farming.mod == "redo" then farm_redo = true end
 end
 
 -- grapes and beans from farming_plus need helpers to grow
-if minetest.get_modpath("farming_plus") or farm_redo then
-	minetest.register_craftitem("farming_nextgen:grape_seedling", {
+if core.get_modpath("farming_plus") or farm_redo then
+	core.register_craftitem("farming_nextgen:grape_seedling", {
 		description = S("A grape seedling for the seeder"),
 		inventory_image = "farming_grapes_1.png"
 	})
 
-	minetest.register_craftitem("farming_nextgen:bean_seedling", {
+	core.register_craftitem("farming_nextgen:bean_seedling", {
 		description = S("A bean seedling for the seeder"),
 		inventory_image = "farming_beanpole_1.png"
 	})
 	  
 	if not farm_redo then
-		minetest.register_craft({
+		core.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:grape_seedling",
 			recipe = {"farming_plus:trellis","farming_plus:grapes"}
 		})
 		
-		minetest.register_craft({
+		core.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:bean_seedling",
 			recipe = {"farming_plus:beanpole","farming_plus:beans"}
 		})
 	else
-		minetest.register_craft({
+		core.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:grape_seedling",
 			recipe = {"farming:trellis","farming:grapes"}
 		})
 		
-		minetest.register_craft({
+		core.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:bean_seedling",
 			recipe = {"farming:beanpole","farming:beans"}
@@ -69,7 +69,7 @@ local soil_nodenames = {
 }
 
 --support compost mod 
-if minetest.get_modpath("compost") then
+if core.get_modpath("compost") then
   
 	soil_nodenames["compost:garden_soil"] = true
 end
@@ -260,9 +260,9 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	if remaining_charge < farmingNG.seeder_charge_per_node or seedstack:is_empty() then
 		return remaining_charge, seednum, seedstack
 	end
-	local node = minetest.get_node(pos)
-	local upper = minetest.get_node(uppos)
-	local top = minetest.get_node(toppos)
+	local node = core.get_node(pos)
+	local upper = core.get_node(uppos)
+	local top = core.get_node(toppos)
 	local seedname = seedstack:get_name()
 	local helpers = check_valid_util(upper.name)
 	
@@ -278,7 +278,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	if not check_valid_util(seedname) then
 		if upper.name == "air" or upper.name == "farming:weed"
 				or string.match(upper.name,"default:grass") then
-			minetest.set_node(uppos, {name="air"})
+			core.set_node(uppos, {name="air"})
 			remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 			seednum = seednum +1
 			seedstack:take_item()
@@ -286,8 +286,8 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 				remaining_charge = 1
 			end
 			if give_seedling(seedname,false) then
-				minetest.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
-				minetest.get_node_timer(uppos):start(math.random(166, 286))
+				core.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
+				core.get_node_timer(uppos):start(math.random(166, 286))
 			end
 		else
 			return remaining_charge, seednum, seedstack
@@ -296,7 +296,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		if (upper.name == "air" or upper.name == "farming:weed" 
 				or string.match(upper.name,"default:grass")) 
 				and top.name == "air" then 
-			minetest.set_node(uppos, {name="air"})
+			core.set_node(uppos, {name="air"})
 			remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
 			seednum = seednum +1
 			seedstack:take_item()
@@ -304,8 +304,8 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 				remaining_charge = 1
 			end
 			if give_seedling(seedname, true) then
-				minetest.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})
-				minetest.get_node_timer(uppos):start(math.random(166, 286))
+				core.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})
+				core.get_node_timer(uppos):start(math.random(166, 286))
 			end
 		else
 			return remaining_charge, seednum, seedstack
@@ -316,7 +316,7 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 		if remaining_charge < farmingNG.seeder_charge_per_node then
 			break
 		end
-		if soil_nodenames[minetest.get_node(npos).name] then
+		if soil_nodenames[core.get_node(npos).name] then
 			remaining_charge, seednum, seedstack = recursive_dig(npos, remaining_charge, seednum, seedstack, user)
 		end
 	end
@@ -327,7 +327,7 @@ end
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	-- Start sawing things down
 	local remaining_charge, seednum, seedstack = recursive_dig(pos, current_charge, seednum, seedstack, user)
-	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain, max_hear_distance = 10})
+	core.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
 
@@ -340,7 +340,7 @@ if farmingNG.havetech then
 			on_use = function(itemstack, user, pointed_thing)
 				local seednum=0
 				local name = user:get_player_name()
-				local privs = minetest.get_player_privs(name)
+				local privs = core.get_player_privs(name)
 
 				if pointed_thing.type ~= "node" then
 					return
@@ -354,8 +354,8 @@ if farmingNG.havetech then
 				local seedstack = inv:get_stack("main", indexnumber)
 				local seedname = seedstack:get_name()
 				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
-				if minetest.is_protected(pos_above_soil, name) then
-					minetest.record_protection_violation(pos_above_soil, name)
+				if core.is_protected(pos_above_soil, name) then
+					core.record_protection_violation(pos_above_soil, name)
 					return
 				end
 				-- Send current charge to digging function so that the
@@ -364,13 +364,13 @@ if farmingNG.havetech then
 
 					if check_valid_seed(seedname) or check_valid_util(seedname) then
 						charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
-						minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
+						core.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
 					else
-					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 					end
 
 				else
-					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 				end
 
 				if not technic.creative_mode then
@@ -385,7 +385,7 @@ if farmingNG.havetech then
 		technic.register_power_tool("farming_nextgen:seeder", farmingNG.seeder_max_charge)
 
 
-		minetest.register_tool("farming_nextgen:seeder", {
+		core.register_tool("farming_nextgen:seeder", {
 			description = S("Seed Machine"),
 			inventory_image = "farming_nextgen_seeder.png",
 			stack_max = 1,
@@ -394,12 +394,12 @@ if farmingNG.havetech then
 			on_use = function(itemstack, user, pointed_thing)
 				local seednum=0
 				local name = user:get_player_name()
-				local privs = minetest.get_player_privs(name)
+				local privs = core.get_player_privs(name)
 				
 				if pointed_thing.type ~= "node" then
 					return itemstack
 				end
-				local meta = minetest.deserialize(itemstack:get_metadata())
+				local meta = core.deserialize(itemstack:get_metadata())
 				if not meta or not meta.charge or
 					meta.charge < farmingNG.seeder_charge_per_node then
 					return
@@ -410,8 +410,8 @@ if farmingNG.havetech then
 				local seedname = seedstack:get_name()
 				local pos_above_soil = vector.add(pointed_thing.under,
 											{ x = 0, y = 1, z = 0 })
-				if minetest.is_protected(pos_above_soil, name) then
-					minetest.record_protection_violation(pos_above_soil, name)
+				if core.is_protected(pos_above_soil, name) then
+					core.record_protection_violation(pos_above_soil, name)
 					return
 				end
 				-- Send current charge to digging function so that the
@@ -420,29 +420,29 @@ if farmingNG.havetech then
 					
 					if check_valid_seed(seedname) or check_valid_util(seedname) then
 					meta.charge, seednum, seedstack = seeder_dig(pointed_thing.under, meta.charge, seednum, seedstack, user)
-					minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
+					core.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
 					else
-					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 					end
 					
 					
 					  
 				else
-					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 				end
 				if not technic.creative_mode then
 					technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
-					itemstack:set_metadata(minetest.serialize(meta))
+					itemstack:set_metadata(core.serialize(meta))
 				end
 				inv:set_stack("main", indexnumber, seedstack)
 				return itemstack
 			end,
 		})
 	end
-	local mesecons_button = minetest.get_modpath("mesecons_button")
+	local mesecons_button = core.get_modpath("mesecons_button")
 	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
 	if farmingNG.easy then
-		minetest.register_craft({
+		core.register_craft({
 			output = "farming_nextgen:seeder",
 			recipe = {
 				{"technic:battery",               trigger,                         "technic:battery"},
@@ -451,7 +451,7 @@ if farmingNG.havetech then
 			}
 		})
 	else
-		minetest.register_craft({
+		core.register_craft({
 			output = "farming_nextgen:seeder",
 			recipe = {
 				{"technic:red_energy_crystal", trigger,                   "technic:red_energy_crystal"},
@@ -461,7 +461,7 @@ if farmingNG.havetech then
 		})
 	end
 else
-	minetest.register_tool("farming_nextgen:seeder", {
+	core.register_tool("farming_nextgen:seeder", {
 		description = S("Automatik seeding tool"),
 		groups = {soil=2},
 		inventory_image = "farming_nextgen_seeder.png",
@@ -470,7 +470,7 @@ else
 		on_use = function(itemstack, user, pointed_thing)
 			local seednum=0
 			local name = user:get_player_name()
-			local privs = minetest.get_player_privs(name)
+			local privs = core.get_player_privs(name)
 			  
 			if pointed_thing.type ~= "node" then
 				return itemstack
@@ -478,7 +478,7 @@ else
 			local charge = 65535 - itemstack:get_wear()
 			if not charge or  
 				charge < farmingNG.seeder_charge_per_node then
-				minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
+				core.chat_send_player(name,S(" *** Your device needs to be serviced"))
 				return
 			end
 
@@ -488,23 +488,23 @@ else
 			local seedname = seedstack:get_name()
 			local pos_above_soil = vector.add(pointed_thing.under,
 				{x = 0, y = 1, z = 0 })
-			if minetest.is_protected(pos_above_soil, name) then
-				minetest.record_protection_violation(pos_above_soil, name)
+			if core.is_protected(pos_above_soil, name) then
+				core.record_protection_violation(pos_above_soil, name)
 				return
 			end
 			if seedname then
 				if check_valid_seed(seedname) or check_valid_util(seedname) then
 					charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
 					if farmingNG.chaton then
-						minetest.chat_send_player(name,S("*** You used : @1 seeds.",seednum) .. "\n" .. 
+						core.chat_send_player(name,S("*** You used : @1 seeds.",seednum) .. "\n" .. 
 														S("Charge for @1 seeds left.",math.floor(charge/farmingNG.seeder_charge_per_node))
 						)
 					end
 				else
-					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 				end
 			else
-				minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+				core.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 			end
 			itemstack:set_wear(65535-charge)
 			inv:set_stack("main", indexnumber, seedstack)
@@ -512,7 +512,7 @@ else
 		end,
 	})
 
-	minetest.register_craft({
+	core.register_craft({
 		output = "farming_nextgen:seeder",
 		recipe = {
 			{"default:mese",		"default:mese_crystal_fragment",	"default:mese"			},
