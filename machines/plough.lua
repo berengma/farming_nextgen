@@ -162,15 +162,30 @@ local function isNearArea(pos, min, max)
 			(vector.distance(pos, max) < math.sqrt(volume)))
 end
 
-local function is_valid(pos1, pos2, name)
+local function isFreeFromProtections(pos1, pos2, name)
 	local checkAreaDown = pos2
 	local checkAreaUp = pos1
+
+	if not pos1 or not pos2 then
+		return false
+	end
 	if checkAreaDown and farmingNG.plough_set_water_nodes then
 		checkAreaDown = vector.add(pos2, vector.new(0, -3, 0))
 	end
 	if checkAreaUp then
 		checkAreaUp = vector.add(pos1, vector.new(0, 2, 0))
 	end
+	if minetest.is_area_protected(checkAreaUp, checkAreaDown, name or "", 1) then
+		if name then
+			minetest.chat_send_player(name, orange("There are already other players protections in this area"))
+	    	minetest.record_protection_violation(checkAreaDown, name)
+		end
+		return false
+	end
+	return true
+end
+
+local function is_valid(pos1, pos2, name)
 	if not pos1 or not pos2 then
 		if name then
 			minetest.chat_send_player(name, orange("One or more positions not set."))
@@ -190,10 +205,7 @@ local function is_valid(pos1, pos2, name)
 			end
 			return false
 	end
-	if minetest.is_area_protected(checkAreaUp, checkAreaDown, name or "", 1) then
-		if name then
-			minetest.chat_send_player(name, orange("There are already protections in this area"))
-		end
+	if not isFreeFromProtections(pos1, pos2, name or "") then
 		return false
 	end 
 
@@ -316,9 +328,7 @@ local onUse = function(itemstack, user, pointed_thing)
 		minetest.chat_send_player(name, orange("You have to click in your defined area"))
 		return
 	end
-    if minetest.is_protected(pos, name) then
-		minetest.chat_send_player(name, orange("Parts of your choosen area are already protected"))
-	    minetest.record_protection_violation(pos, name)
+    if not isFreeFromProtections(areaMin, areaMax, name) then
 	    return
     end
  	if not isAreaClean(areaMin, areaMax) then

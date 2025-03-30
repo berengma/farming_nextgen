@@ -493,7 +493,7 @@ else
 	  
 	  minetest.register_tool("farming_nextgen:seeder", {
 		  description = S("Automatik seeding tool"),
-		  groups = {soil=3,soil=2},
+		  groups = {soil=2},
 		  inventory_image = "farming_nextgen_seeder.png",
 		  stack_max=1,
 		  liquids_pointable = false,

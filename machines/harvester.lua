@@ -307,7 +307,7 @@ else
 		    
 		    minetest.register_tool("farming_nextgen:harvester", {
 			    description = S("Harvester"),
-			    groups = {soil=3,soil=2},
+			    groups = {soil=2},
 			    inventory_image = "farming_nextgen_harvester.png",
 			    stack_max=1,
 			    liquids_pointable = false,
