@@ -7,60 +7,56 @@
 
 local farm_redo = false
 local S = farmingNG.S
-      
+	  
 -- different values if technic not present
 if not farmingNG.havetech then
-      farmingNG.seeder_charge_per_node = math.floor(65535 / farmingNG.seeder_max_charge * farmingNG.seeder_charge_per_node)
-      farmingNG.seeder_max_charge = 65535
+	farmingNG.seeder_charge_per_node = math.floor(65535 / farmingNG.seeder_max_charge * farmingNG.seeder_charge_per_node)
+	farmingNG.seeder_max_charge = 65535
 end
 
 --check for farming redo mod
 if minetest.global_exists("farming") then
-    if farming.mod == "redo" then farm_redo = true end
+	if farming.mod == "redo" then farm_redo = true end
 end
 
 -- grapes and beans from farming_plus need helpers to grow
 if minetest.get_modpath("farming_plus") or farm_redo then
-  
-      minetest.register_craftitem("farming_nextgen:grape_seedling", {
-	    description = S("A grape seedling for the seeder"),
-	    inventory_image = "farming_grapes_1.png"
-      })
+	minetest.register_craftitem("farming_nextgen:grape_seedling", {
+		description = S("A grape seedling for the seeder"),
+		inventory_image = "farming_grapes_1.png"
+	})
 
-      minetest.register_craftitem("farming_nextgen:bean_seedling", {
-	    description = S("A bean seedling for the seeder"),
-	    inventory_image = "farming_beanpole_1.png"
-      })
-      
-      if not farm_redo then
-	    minetest.register_craft({
+	minetest.register_craftitem("farming_nextgen:bean_seedling", {
+		description = S("A bean seedling for the seeder"),
+		inventory_image = "farming_beanpole_1.png"
+	})
+	  
+	if not farm_redo then
+		minetest.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:grape_seedling",
 			recipe = {"farming_plus:trellis","farming_plus:grapes"}
-	    })
-	    
-	    minetest.register_craft({
+		})
+		
+		minetest.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:bean_seedling",
 			recipe = {"farming_plus:beanpole","farming_plus:beans"}
-	    })
-      else
-	    minetest.register_craft({
+		})
+	else
+		minetest.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:grape_seedling",
 			recipe = {"farming:trellis","farming:grapes"}
-	    })
-	    
-	    minetest.register_craft({
+		})
+		
+		minetest.register_craft({
 			type = "shapeless",
 			output = "farming_nextgen:bean_seedling",
 			recipe = {"farming:beanpole","farming:beans"}
-	    })
-      end
-	
+		})
+	  end
 end
-
-
 
 -- The default soils
 local soil_nodenames = {
@@ -72,14 +68,11 @@ local soil_nodenames = {
 	["farming:dry_soil_wet"]		= true
 }
 
-
 --support compost mod 
 if minetest.get_modpath("compost") then
   
 	soil_nodenames["compost:garden_soil"] = true
 end
-
-
 
 farmingNG.seeder_seed = {
 -- *** farming
@@ -122,89 +115,88 @@ farmingNG.seeder_seed = {
 		{"farming:asparagus", "farming:asparagus_1"},
 		-- farming redo also adds strawberry with ethereal mod name
 		{"ethereal:strawberry", "ethereal:strawberry_1"},
-	    
+		
 -- *** farming_plus
-	    {"farming_plus:carrot_seed", "farming_plus:carrot_1"},
-	    {"farming_plus:chilli_seeds", "farming_plus:chilli_1"},
-	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
-	    {"farming_plus:corn_seed", "farming_plus:corn_1"},
-	    {"farming_plus:cucumber_seed", "farming_plus:cucumber_1"},
-	    {"farming_plus:garlic_seed", "farming_plus:garlic_1"},
-	    {"farming_plus:seed_hemp", "farming_plus:hemp_1"},
-	    {"farming_plus:melon_seed", "farming_plus:melon_1"},
-	    {"farming_plus:potato_seed", "farming_plus:potato_1"},
-	    {"farming_plus:rhubarb_seed", "farming_plus:rhubarb_1"},
-	    {"farming_plus:raspberry_seed", "farming_plus:raspberry_1"},
-	    {"farming_plus:strawberry_seed", "farming_plus:strawberry_1"},
-	    {"farming_plus:soy_seed", "farming_plus:soy_plant_1"},
-	    {"farming_plus:tomato_seed", "farming_plus:tomato_1"},
-	    {"farming_plus:walnut_item", "farming_plus:walnut_1"},
-	    {"farming_plus:orange_seed", "farming_plus:orange_1"},
-	    {"farming_plus:lemon_seed", "farming_plus:lemon_1"},
-	    {"farming_plus:peach_seed", "farming_plus:peach_1"},
-	    {"farming_plus:seed_barley", "farming_plus:barley_1"},
-	    {"farming_plus:coffee_beans", "farming_plus:coffee_1"},
-	
+		{"farming_plus:carrot_seed", "farming_plus:carrot_1"},
+		{"farming_plus:chilli_seeds", "farming_plus:chilli_1"},
+		{"farming_plus:coffee_beans", "farming_plus:coffee_1"},
+		{"farming_plus:corn_seed", "farming_plus:corn_1"},
+		{"farming_plus:cucumber_seed", "farming_plus:cucumber_1"},
+		{"farming_plus:garlic_seed", "farming_plus:garlic_1"},
+		{"farming_plus:seed_hemp", "farming_plus:hemp_1"},
+		{"farming_plus:melon_seed", "farming_plus:melon_1"},
+		{"farming_plus:potato_seed", "farming_plus:potato_1"},
+		{"farming_plus:rhubarb_seed", "farming_plus:rhubarb_1"},
+		{"farming_plus:raspberry_seed", "farming_plus:raspberry_1"},
+		{"farming_plus:strawberry_seed", "farming_plus:strawberry_1"},
+		{"farming_plus:soy_seed", "farming_plus:soy_plant_1"},
+		{"farming_plus:tomato_seed", "farming_plus:tomato_1"},
+		{"farming_plus:walnut_item", "farming_plus:walnut_1"},
+		{"farming_plus:orange_seed", "farming_plus:orange_1"},
+		{"farming_plus:lemon_seed", "farming_plus:lemon_1"},
+		{"farming_plus:peach_seed", "farming_plus:peach_1"},
+		{"farming_plus:seed_barley", "farming_plus:barley_1"},
+		{"farming_plus:coffee_beans", "farming_plus:coffee_1"},
 -- *** beer_test
-	    {"beer_test:seed_oats", "beer_test:seed_oats"},
+		{"beer_test:seed_oats", "beer_test:seed_oats"},
 
 -- If you have Problems with growing wheat and cotton, then try the two lines below
-	    {"farming:seed_wheat", "farming:wheat_1"},
-	    {"farming:seed_cotton", "farming:cotton_1"}
+		{"farming:seed_wheat", "farming:wheat_1"},
+		{"farming:seed_cotton", "farming:cotton_1"}
 
 -- If you haven't any Problems with growing wheat and cotton, then use the two lines below
 --	    {"farming:seed_wheat", "farming:seed_wheat"},
 --	    {"farming:seed_cotton", "farming:seed_cotton"}
-	    
 }
    
 -- wine and beans need climbing utilities
- 
 farmingNG.seeder_utils = {
   {"farming_nextgen:grape_seedling", "farming_plus:grapes_1"},
   {"farming_nextgen:bean_seedling", "farming_plus:beanpole_1"}
 }
-      
+	  
 if farm_redo then
-     farmingNG.seeder_utils = {
-      {"farming_nextgen:grape_seedling", "farming:grapes_1"},
-      {"farming_nextgen:bean_seedling", "farming:beanpole_1"}
-      }
+	farmingNG.seeder_utils = {
+		{"farming_nextgen:grape_seedling", "farming:grapes_1"},
+		{"farming_nextgen:bean_seedling", "farming:beanpole_1"}
+	}
 end
-
-
 
 local function check_valid_util(sname)
-     for i in ipairs(farmingNG.seeder_utils) do
-      if sname == farmingNG.seeder_utils[i][1] then return true end
-     end
-    return false
+	for i in ipairs(farmingNG.seeder_utils) do
+		if sname == farmingNG.seeder_utils[i][1] then
+			return true
+		end
+	end
+	return false
 end
-
-	    
 
 -- function to check for valid seeds
 local function check_valid_seed(sname)
   
-    for i in ipairs(farmingNG.seeder_seed) do
-      if sname == farmingNG.seeder_seed[i][1] then return true end
-    end
-    return false
+	for i in ipairs(farmingNG.seeder_seed) do
+		if sname == farmingNG.seeder_seed[i][1] then return true end
+	end
+	return false
 end
 
 --function to give name of seedlings
 local function give_seedling(sname, util)
 
-     if not util then
-	  for i in ipairs(farmingNG.seeder_seed) do
-	    if sname == farmingNG.seeder_seed[i][1] then return farmingNG.seeder_seed[i][2] end
-	  end
-     else
-	  for i in ipairs(farmingNG.seeder_utils) do
-	    if sname ==farmingNG.seeder_utils[i][1] then return farmingNG.seeder_utils[i][2] end
-	  end
-     end
-    return nil
+	if not util then
+		for i in ipairs(farmingNG.seeder_seed) do
+			if sname == farmingNG.seeder_seed[i][1] then
+				return farmingNG.seeder_seed[i][2]
+			end
+		end
+	else
+		for i in ipairs(farmingNG.seeder_utils) do
+			if sname ==farmingNG.seeder_utils[i][1] then
+				return farmingNG.seeder_utils[i][2]
+			end
+		end
+	end
+	return nil
 end
 
 --- Iterator over positions to try to saw around a sawed node.
@@ -275,8 +267,8 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	local helpers = check_valid_util(upper.name)
 	
 	if node.name == "farming:weed" then
-	    remaining_charge, seednum, seedstack = recursive_dig( {x=pos.x, y=pos.y-1, z=pos.z}, remaining_charge, seednum, seedstack, user)
-	    return remaining_charge, seednum, seedstack
+		remaining_charge, seednum, seedstack = recursive_dig( {x=pos.x, y=pos.y-1, z=pos.z}, remaining_charge, seednum, seedstack, user)
+		return remaining_charge, seednum, seedstack
 	end
 
 	if not soil_nodenames[node.name] then
@@ -284,37 +276,41 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	end	
 	
 	if not check_valid_util(seedname) then
-	      if upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")then
-		    minetest.set_node(uppos, {name="air"})
-		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
-		    seednum = seednum +1
-		    seedstack:take_item()
-		    if remaining_charge < 1 then remaining_charge = 1 end
-		    
-		    if give_seedling(seedname,false) then
-			  minetest.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
-			  minetest.get_node_timer(uppos):start(math.random(166, 286))
-		    end
-	      else
-		    return remaining_charge, seednum, seedstack
-	      end
+		if upper.name == "air" or upper.name == "farming:weed"
+				or string.match(upper.name,"default:grass") then
+			minetest.set_node(uppos, {name="air"})
+			remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
+			seednum = seednum +1
+			seedstack:take_item()
+			if remaining_charge < 1 then
+				remaining_charge = 1
+			end
+			if give_seedling(seedname,false) then
+				minetest.add_node(uppos, {name = give_seedling(seedname,false), param2 = 1})
+				minetest.get_node_timer(uppos):start(math.random(166, 286))
+			end
+		else
+			return remaining_charge, seednum, seedstack
+		end
 	else
-	     if (upper.name == "air" or upper.name == "farming:weed" or string.match(upper.name,"default:grass")) and top.name == "air" then 
-		    minetest.set_node(uppos, {name="air"})
-		    remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
-		    seednum = seednum +1
-		    seedstack:take_item()
-		    if remaining_charge < 1 then remaining_charge = 1 end
-		    
-		    if give_seedling(seedname, true) then
-			  minetest.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})
-			  minetest.get_node_timer(uppos):start(math.random(166, 286))
-		    end
-	     else
-		    return remaining_charge, seednum, seedstack
-	     end
+		if (upper.name == "air" or upper.name == "farming:weed" 
+				or string.match(upper.name,"default:grass")) 
+				and top.name == "air" then 
+			minetest.set_node(uppos, {name="air"})
+			remaining_charge = remaining_charge - farmingNG.seeder_charge_per_node
+			seednum = seednum +1
+			seedstack:take_item()
+			if remaining_charge < 1 then
+				remaining_charge = 1
+			end
+			if give_seedling(seedname, true) then
+				minetest.add_node(uppos, {name = give_seedling(seedname, true), param2 = 1})
+				minetest.get_node_timer(uppos):start(math.random(166, 286))
+			end
+		else
+			return remaining_charge, seednum, seedstack
+		end
 	end
-
 	-- Check surroundings and run recursively if any charge left
 	for npos in farmingNG.iterSawTries(pos) do
 		if remaining_charge < farmingNG.seeder_charge_per_node then
@@ -327,8 +323,6 @@ local function recursive_dig(pos, remaining_charge, seednum,seedstack, user)
 	return remaining_charge, seednum, seedstack
 end
 
-
-
 -- Seeder entry point
 local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	-- Start sawing things down
@@ -336,7 +330,6 @@ local function seeder_dig(pos, current_charge, seednum, seedstack, user)
 	minetest.sound_play("farming_nextgen_seeder", {pos = pos, gain = farmingNG.gain, max_hear_distance = 10})
 	return remaining_charge, seednum, seedstack
 end
-
 
 if farmingNG.havetech then
 	if technic.plus then
@@ -352,23 +345,19 @@ if farmingNG.havetech then
 				if pointed_thing.type ~= "node" then
 					return
 				end
-
 				local charge = technic.get_RE_charge(itemstack)
 				if charge < farmingNG.seeder_charge_per_node then
 					return
 				end
-
 				local inv = user:get_inventory()
 				local indexnumber = user:get_wield_index()+1
 				local seedstack = inv:get_stack("main", indexnumber)
 				local seedname = seedstack:get_name()
-
 				local pos_above_soil = vector.add(pointed_thing.under, { x = 0, y = 1, z = 0 })
 				if minetest.is_protected(pos_above_soil, name) then
 					minetest.record_protection_violation(pos_above_soil, name)
 					return
 				end
-
 				-- Send current charge to digging function so that the
 				-- seeder will stop after digging a number of nodes
 				if seedname then
@@ -392,82 +381,66 @@ if farmingNG.havetech then
 			end,
 		})
 	else
-  
 	  --local S = technic.getter
+		technic.register_power_tool("farming_nextgen:seeder", farmingNG.seeder_max_charge)
 
-	  technic.register_power_tool("farming_nextgen:seeder", farmingNG.seeder_max_charge)
 
-
-	  minetest.register_tool("farming_nextgen:seeder", {
-		  description = S("Seed Machine"),
-		  inventory_image = "farming_nextgen_seeder.png",
-		  stack_max = 1,
-		  wear_represents = "technic_RE_charge",
-		  on_refill = technic.refill_RE_charge,
-		  on_use = function(itemstack, user, pointed_thing)
-		    local seednum=0
-		    local name = user:get_player_name()
-		    local privs = minetest.get_player_privs(name)
-		    
-			
-			  if pointed_thing.type ~= "node" then
-				  return itemstack
-			  end
-
-			  local meta = minetest.deserialize(itemstack:get_metadata())
-			  if not meta or not meta.charge or
-					  meta.charge < farmingNG.seeder_charge_per_node then
-				  return
-			  end
-
-			  local inv = user:get_inventory()
-			  local indexnumber = user:get_wield_index()+1
-			  local seedstack = inv:get_stack("main", indexnumber)
-			  local seedname = seedstack:get_name()
-
-			  
-			  
-
-			  local pos_above_soil = vector.add(pointed_thing.under,
-			                                    { x = 0, y = 1, z = 0 })
-			  if minetest.is_protected(pos_above_soil, name) then
-				  minetest.record_protection_violation(pos_above_soil, name)
-				  return
-			  end
-
-			  -- Send current charge to digging function so that the
-			  -- seeder will stop after digging a number of nodes
-			  if seedname then
-			    
-			    if check_valid_seed(seedname) or check_valid_util(seedname) then
-				meta.charge, seednum, seedstack = seeder_dig(pointed_thing.under, meta.charge, seednum, seedstack, user)
-				minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
-			    else
-				minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
-			    end
-			    
-			    
-			      
-			  else
-			      minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
-			  end
-			  
-			  if not technic.creative_mode then
-				  technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
-				  itemstack:set_metadata(minetest.serialize(meta))
-			  end
-			  inv:set_stack("main", indexnumber, seedstack)
-			  return itemstack
-		    
-			  
-		  end,
-	  })
-
+		minetest.register_tool("farming_nextgen:seeder", {
+			description = S("Seed Machine"),
+			inventory_image = "farming_nextgen_seeder.png",
+			stack_max = 1,
+			wear_represents = "technic_RE_charge",
+			on_refill = technic.refill_RE_charge,
+			on_use = function(itemstack, user, pointed_thing)
+				local seednum=0
+				local name = user:get_player_name()
+				local privs = minetest.get_player_privs(name)
+				
+				if pointed_thing.type ~= "node" then
+					return itemstack
+				end
+				local meta = minetest.deserialize(itemstack:get_metadata())
+				if not meta or not meta.charge or
+					meta.charge < farmingNG.seeder_charge_per_node then
+					return
+				end
+				local inv = user:get_inventory()
+				local indexnumber = user:get_wield_index()+1
+				local seedstack = inv:get_stack("main", indexnumber)
+				local seedname = seedstack:get_name()
+				local pos_above_soil = vector.add(pointed_thing.under,
+											{ x = 0, y = 1, z = 0 })
+				if minetest.is_protected(pos_above_soil, name) then
+					minetest.record_protection_violation(pos_above_soil, name)
+					return
+				end
+				-- Send current charge to digging function so that the
+				-- seeder will stop after digging a number of nodes
+				if seedname then
+					
+					if check_valid_seed(seedname) or check_valid_util(seedname) then
+					meta.charge, seednum, seedstack = seeder_dig(pointed_thing.under, meta.charge, seednum, seedstack, user)
+					minetest.chat_send_player(name,S("*** You used :  @1 seeds",seednum))
+					else
+					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+					end
+					
+					
+					  
+				else
+					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
+				end
+				if not technic.creative_mode then
+					technic.set_RE_wear(itemstack, meta.charge, farmingNG.seeder_max_charge)
+					itemstack:set_metadata(minetest.serialize(meta))
+				end
+				inv:set_stack("main", indexnumber, seedstack)
+				return itemstack
+			end,
+		})
 	end
-
 	local mesecons_button = minetest.get_modpath("mesecons_button")
 	local trigger = mesecons_button and "mesecons_button:button_off" or "default:mese_crystal_fragment"
-
 	if farmingNG.easy then
 		minetest.register_craft({
 			output = "farming_nextgen:seeder",
@@ -487,87 +460,64 @@ if farmingNG.havetech then
 			}
 		})
 	end
-	  
 else
-	      
-	  
-	  minetest.register_tool("farming_nextgen:seeder", {
-		  description = S("Automatik seeding tool"),
-		  groups = {soil=2},
-		  inventory_image = "farming_nextgen_seeder.png",
-		  stack_max=1,
-		  liquids_pointable = false,
-		  on_use = function(itemstack, user, pointed_thing)
-		    local seednum=0
-		    local name = user:get_player_name()
-		    local privs = minetest.get_player_privs(name)
-		    
+	minetest.register_tool("farming_nextgen:seeder", {
+		description = S("Automatik seeding tool"),
+		groups = {soil=2},
+		inventory_image = "farming_nextgen_seeder.png",
+		stack_max=1,
+		liquids_pointable = false,
+		on_use = function(itemstack, user, pointed_thing)
+			local seednum=0
+			local name = user:get_player_name()
+			local privs = minetest.get_player_privs(name)
 			  
-			  if pointed_thing.type ~= "node" then
-				  return itemstack
-			  end
+			if pointed_thing.type ~= "node" then
+				return itemstack
+			end
+			local charge = 65535 - itemstack:get_wear()
+			if not charge or  
+				charge < farmingNG.seeder_charge_per_node then
+				minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
+				return
+			end
 
-			  local charge = 65535 - itemstack:get_wear()
-			  
-			  if not charge or  
-					  charge < farmingNG.seeder_charge_per_node then
-					  minetest.chat_send_player(name,S(" *** Your device needs to be serviced"))
-				  return
-			  end
-
-			  local inv = user:get_inventory()
-			  local indexnumber = user:get_wield_index()+1
-			  local seedstack = inv:get_stack("main", indexnumber)
-			  local seedname = seedstack:get_name()
-
-			  
-			  
-
-
-			  local pos_above_soil = vector.add(pointed_thing.under,
-			                                    { x = 0, y = 1, z = 0 })
-			  if minetest.is_protected(pos_above_soil, name) then
-				  minetest.record_protection_violation(pos_above_soil, name)
-				  return
-			  end
-
-			  
-			  
-			  if seedname then
-			    if check_valid_seed(seedname) or check_valid_util(seedname) then
-				charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
-				if farmingNG.chaton then
-				     minetest.chat_send_player(name,S("*** You used : @1 seeds.",seednum) .. "\n" .. 
-                                                    S("Charge for @1 seeds left.",math.floor(charge/farmingNG.seeder_charge_per_node))
-                                              )
+			local inv = user:get_inventory()
+			local indexnumber = user:get_wield_index()+1
+			local seedstack = inv:get_stack("main", indexnumber)
+			local seedname = seedstack:get_name()
+			local pos_above_soil = vector.add(pointed_thing.under,
+				{x = 0, y = 1, z = 0 })
+			if minetest.is_protected(pos_above_soil, name) then
+				minetest.record_protection_violation(pos_above_soil, name)
+				return
+			end
+			if seedname then
+				if check_valid_seed(seedname) or check_valid_util(seedname) then
+					charge, seednum, seedstack = seeder_dig(pointed_thing.under, charge, seednum, seedstack, user)
+					if farmingNG.chaton then
+						minetest.chat_send_player(name,S("*** You used : @1 seeds.",seednum) .. "\n" .. 
+														S("Charge for @1 seeds left.",math.floor(charge/farmingNG.seeder_charge_per_node))
+						)
+					end
+				else
+					minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
 				end
-			    else
+			else
 				minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
-			    end
-			  else
-			      minetest.chat_send_player(name,S(" *** you need valid seeds on the right side of your device"))
-			  end
-			  
-			  
-			  itemstack:set_wear(65535-charge)
-			  
-			  inv:set_stack("main", indexnumber, seedstack)
-			  return itemstack
-		    
-			  
-		  end,
-	  })
+			end
+			itemstack:set_wear(65535-charge)
+			inv:set_stack("main", indexnumber, seedstack)
+			return itemstack
+		end,
+	})
 
-	  
-
-	  minetest.register_craft({
-		  output = "farming_nextgen:seeder",
-		  recipe = {
-			  {"default:mese",                                    "default:mese_crystal_fragment",                      "default:mese"              },
-			  {"default:gold_ingot",      "default:bronze_ingot",              "default:gold_ingot"},
-			  {"default:diamond",                              "",                                 "default:diamond"},
-		  }
-	  })
+	minetest.register_craft({
+		output = "farming_nextgen:seeder",
+		recipe = {
+			{"default:mese",		"default:mese_crystal_fragment",	"default:mese"			},
+			{"default:gold_ingot",	"default:bronze_ingot",				"efault:gold_ingot"		},
+			{"default:diamond",		"",									"default:diamond"		},
+		}
+	})
 end
-
-  
